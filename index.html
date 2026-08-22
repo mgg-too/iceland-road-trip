@@ -1,0 +1,1278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="robots" content="noindex, nofollow">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Iceland — The Ring Road and Snæfellsnes in Ten Days</title>
+<meta name="description" content="A ten-day self-drive around Iceland's Ring Road and the Snæfellsnes peninsula in August, planned around the light. Family of five.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,800&family=Source+Serif+4:opsz,wght@8..60,400;8..60,600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --basalt:#14181C;
+  --ash:#283037;
+  --slate:#5A6672;
+  --glacier:#EDF1F2;
+  --glacier-deep:#DCE4E7;
+  --meltwater:#3F7F98;
+  --moss:#65784F;
+  --amber:#D9A441;
+  --rust:#A65A3A;
+  --line:rgba(20,24,28,.14);
+  --display:"Bricolage Grotesque",system-ui,sans-serif;
+  --body:"Source Serif 4",Georgia,serif;
+  --mono:"IBM Plex Mono",ui-monospace,monospace;
+  --wrap:min(1080px,100% - 2.5rem);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{
+  margin:0;background:var(--glacier);color:var(--basalt);
+  font-family:var(--body);font-size:17px;line-height:1.62;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3,h4{font-family:var(--display);font-weight:600;line-height:1.08;margin:0;letter-spacing:-.01em}
+a{color:var(--meltwater);text-underline-offset:3px;text-decoration-thickness:1px}
+a:hover{color:var(--basalt)}
+:focus-visible{outline:2px solid var(--meltwater);outline-offset:3px}
+.wrap{width:var(--wrap);margin-inline:auto}
+.mono{font-family:var(--mono);font-size:.78rem;letter-spacing:.06em;text-transform:uppercase}
+
+/* ── masthead ─────────────────────────────── */
+.masthead{background:var(--basalt);color:var(--glacier);padding:5.5rem 0 0;position:relative;overflow:hidden}
+.masthead .wrap{position:relative;z-index:2}
+.eyebrow{font-family:var(--mono);font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;color:var(--amber);margin-bottom:1.6rem}
+.masthead h1{
+  font-size:clamp(3.2rem,11vw,7.5rem);font-weight:800;letter-spacing:-.045em;
+  line-height:.88;color:#fff;
+}
+.masthead h1 em{font-style:normal;display:block;color:var(--meltwater);
+  font-size:clamp(1.5rem,4.4vw,2.9rem);font-weight:400;letter-spacing:-.02em;margin-top:.7rem}
+.standfirst{max-width:44ch;margin:2rem 0 0;color:rgba(237,241,242,.76);font-size:1.05rem}
+.masthead-meta{display:flex;flex-wrap:wrap;gap:.5rem 2.2rem;margin:2.4rem 0 3.6rem;
+  color:rgba(237,241,242,.55);font-family:var(--mono);font-size:.74rem;letter-spacing:.1em;text-transform:uppercase}
+
+/* ── the signature: light ribbon ──────────── */
+.ribbon{position:relative;height:52px;border-radius:3px;overflow:hidden;background:#0A0D10}
+.ribbon .seg{position:absolute;top:0;bottom:0}
+.seg.twilight{background:linear-gradient(180deg,#1E2A38,#141B24)}
+.seg.day{background:linear-gradient(180deg,#C9DAE1,#AFC6D0)}
+.seg.golden{background:linear-gradient(180deg,rgba(217,164,65,.95),rgba(191,126,48,.9))}
+.ribbon .block{
+  position:absolute;top:8px;bottom:8px;border-radius:2px;
+  background:rgba(20,24,28,.82);color:#EDF1F2;
+  display:flex;align-items:center;padding:0 .5rem;overflow:hidden;
+  font-family:var(--mono);font-size:.63rem;letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;
+  border-left:2px solid var(--amber);
+}
+.ribbon .block.drive{background:rgba(63,127,152,.86);border-left-color:#8FC2D6}
+.ribbon-scale{display:flex;justify-content:space-between;margin-top:.4rem;
+  font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;color:var(--slate)}
+.masthead .ribbon-scale{color:rgba(237,241,242,.45)}
+.ribbon-key{display:flex;flex-wrap:wrap;gap:.4rem 1.4rem;margin-top:1.1rem;
+  font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:rgba(237,241,242,.6)}
+.ribbon-key span{display:flex;align-items:center;gap:.45rem}
+.sw{width:16px;height:9px;border-radius:1px;display:inline-block}
+.masthead .ribbon-wrap{padding-bottom:3.5rem}
+
+/* ── nav ──────────────────────────────────── */
+.dayNav{position:sticky;top:0;z-index:40;background:rgba(237,241,242,.93);
+  backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+.dayNav .wrap{display:flex;gap:.15rem;overflow-x:auto;padding:.55rem 0;scrollbar-width:none}
+.dayNav .wrap::-webkit-scrollbar{display:none}
+.dayNav a{flex:0 0 auto;padding:.34rem .72rem;border-radius:2px;text-decoration:none;
+  font-family:var(--mono);font-size:.7rem;letter-spacing:.09em;text-transform:uppercase;color:var(--slate)}
+.dayNav a:hover{background:var(--glacier-deep);color:var(--basalt)}
+
+/* ── sections ─────────────────────────────── */
+section{padding:4.5rem 0}
+section+section{border-top:1px solid var(--line)}
+.kicker{font-family:var(--mono);font-size:.72rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--meltwater);margin-bottom:.9rem}
+h2{font-size:clamp(1.9rem,4.4vw,2.9rem);font-weight:600;letter-spacing:-.03em;margin-bottom:1.1rem}
+h3{font-size:1.16rem;font-weight:600;margin:2rem 0 .4rem}
+h3 .t{font-family:var(--mono);font-size:.72rem;font-weight:400;letter-spacing:.1em;
+  color:var(--meltwater);margin-left:.6rem;text-transform:uppercase}
+p{margin:0 0 1rem;max-width:66ch}
+.lede{font-size:1.14rem;color:var(--ash);max-width:60ch}
+
+/* ── day layout ───────────────────────────── */
+.day{scroll-margin-top:56px}
+.day-head{display:grid;grid-template-columns:5.5rem 1fr;gap:1.6rem;align-items:start;margin-bottom:1.6rem}
+.day-num{font-family:var(--display);font-size:3.6rem;font-weight:800;line-height:.8;
+  color:var(--glacier-deep);-webkit-text-stroke:1px var(--slate);letter-spacing:-.04em}
+.day-title{font-size:clamp(1.6rem,3.6vw,2.35rem);letter-spacing:-.028em}
+.day-route{font-family:var(--mono);font-size:.74rem;letter-spacing:.09em;text-transform:uppercase;
+  color:var(--slate);margin-top:.6rem}
+.grid{display:grid;grid-template-columns:1.15fr .85fr;gap:2.6rem;align-items:start}
+
+/* photos */
+figure{margin:0}
+.shot{position:relative;aspect-ratio:4/3;border-radius:3px;overflow:hidden;background:var(--glacier-deep)}
+.shot.tall{aspect-ratio:3/4}
+.shot img{position:relative;z-index:1;width:100%;height:100%;object-fit:cover;display:block}
+.shot.solo{aspect-ratio:3/2}
+.shot .ph{position:absolute;inset:0;display:flex;align-items:flex-end;padding:1rem;
+  background:linear-gradient(150deg,var(--ash),var(--meltwater) 70%,var(--moss));
+  color:rgba(255,255,255,.85);font-family:var(--mono);font-size:.68rem;letter-spacing:.1em;text-transform:uppercase}
+figcaption{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--slate);margin-top:.5rem}
+.stack{display:grid;gap:1.1rem}
+
+/* hotel card */
+.hotel{border:1px solid var(--line);border-left:3px solid var(--moss);
+  background:#fff;padding:1.1rem 1.25rem;border-radius:2px;margin:1.6rem 0}
+.hotel .lbl{font-family:var(--mono);font-size:.66rem;letter-spacing:.16em;text-transform:uppercase;color:var(--moss)}
+.hotel .name{font-family:var(--display);font-size:1.2rem;font-weight:600;margin:.2rem 0 .4rem}
+.hotel p{font-size:.95rem;margin:0;color:var(--ash)}
+.note{border-left:3px solid var(--rust);background:rgba(166,90,58,.06);
+  padding:.9rem 1.15rem;border-radius:2px;margin:1.5rem 0;font-size:.96rem}
+.note strong{font-family:var(--display);font-weight:600}
+.note p:last-child{margin-bottom:0}
+
+/* tables */
+table{width:100%;border-collapse:collapse;margin:1.4rem 0;font-size:.93rem}
+th{text-align:left;font-family:var(--mono);font-size:.66rem;letter-spacing:.12em;text-transform:uppercase;
+  color:#fff;background:var(--ash);padding:.6rem .8rem;font-weight:500}
+td{padding:.6rem .8rem;border-bottom:1px solid var(--line);vertical-align:top}
+tbody tr:nth-child(even){background:rgba(255,255,255,.55)}
+td.num{text-align:right;font-family:var(--mono);font-size:.86rem;white-space:nowrap}
+tfoot td{font-weight:600;border-top:2px solid var(--ash);border-bottom:none;background:none}
+.table-scroll{overflow-x:auto}
+
+ul.clean{list-style:none;padding:0;margin:1rem 0}
+ul.clean li{padding-left:1.3rem;position:relative;margin-bottom:.6rem;max-width:66ch}
+ul.clean li::before{content:"";position:absolute;left:0;top:.62em;width:6px;height:6px;
+  background:var(--meltwater);border-radius:50%}
+
+.linkgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(230px,1fr));gap:.55rem;margin-top:1.4rem}
+.linkgrid a{display:block;padding:.6rem .8rem;background:#fff;border:1px solid var(--line);
+  border-radius:2px;text-decoration:none;color:var(--basalt);font-size:.9rem}
+.linkgrid a:hover{border-color:var(--meltwater);background:#fff}
+.linkgrid a span{display:block;font-family:var(--mono);font-size:.64rem;letter-spacing:.08em;
+  color:var(--meltwater);margin-top:.2rem}
+
+footer{background:var(--basalt);color:rgba(237,241,242,.6);padding:3rem 0;font-size:.85rem}
+footer a{color:var(--meltwater)}
+
+.js .reveal{opacity:0;transform:translateY(14px)}
+.js .reveal.in{opacity:1;transform:none;transition:opacity .6s ease,transform .6s ease}
+
+@media (max-width:860px){
+  body{font-size:16px}
+  .grid{grid-template-columns:1fr;gap:1.6rem}
+  .day-head{grid-template-columns:3.2rem 1fr;gap:1rem}
+  .day-num{font-size:2.4rem}
+  .ribbon{height:auto;min-height:34px}
+  .ribbon .block{font-size:0;padding:0;border-left-width:3px}
+  .mobile-sched{display:block}
+}
+@media (min-width:861px){.mobile-sched{display:none}}
+.mobile-sched{margin:.7rem 0 0;font-family:var(--mono);font-size:.72rem;color:var(--slate)}
+.mobile-sched div{display:flex;gap:.7rem;padding:.15rem 0}
+.mobile-sched b{color:var(--basalt);font-weight:500;min-width:5.2rem}
+
+@media print{
+  .dayNav,.ribbon-key{display:none}
+  body{background:#fff;font-size:11pt}
+  section{padding:1.4rem 0;break-inside:avoid}
+  .masthead{background:#fff;color:#000}
+  .masthead h1{color:#000}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .reveal{opacity:1;transform:none}
+  html{scroll-behavior:auto}
+}
+
+details.legs{margin-top:.9rem;border-top:1px solid var(--line);padding-top:.6rem}
+details.legs summary{cursor:pointer;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--meltwater);list-style:none}
+details.legs summary::-webkit-details-marker{display:none}
+details.legs summary::before{content:"+ ";font-weight:600}
+details.legs[open] summary::before{content:"\2212 "}
+table.legtable{margin:.7rem 0 0;font-size:.86rem}
+table.legtable td{padding:.35rem .6rem;border-bottom:1px solid var(--line)}
+table.legtable tr.tot td{font-weight:600;border-top:1px solid var(--ash);border-bottom:none}
+p.altnote{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--rust);margin:.5rem 0 0}
+@media print{details.legs{display:block}details.legs summary{display:none}}
+#map{height:min(72vh,640px);border-radius:3px;background:var(--glacier-deep);z-index:1}
+.mapbar{display:flex;flex-wrap:wrap;gap:.35rem;margin:0 0 .9rem}
+.mapbar button{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  padding:.35rem .7rem;border:1px solid var(--line);background:#fff;color:var(--slate);
+  border-radius:2px;cursor:pointer}
+.mapbar button:hover{border-color:var(--meltwater);color:var(--basalt)}
+.mapbar button[aria-pressed="true"]{background:var(--basalt);color:var(--glacier);border-color:var(--basalt)}
+.pin{display:flex;align-items:center;justify-content:center;border-radius:50%;
+  color:#fff;font-family:var(--mono);font-size:.7rem;font-weight:500;
+  border:2px solid rgba(255,255,255,.85);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.leaflet-popup-content{font-family:var(--body);font-size:.9rem;margin:.7rem .9rem}
+.leaflet-popup-content b{font-family:var(--display);display:block;margin-bottom:.15rem}
+.leaflet-popup-content .d{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--meltwater);display:block;margin-bottom:.3rem}
+.leaflet-popup-content a{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;
+  text-transform:uppercase;display:inline-block;margin-top:.5rem}
+.maplinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem;margin-top:1.2rem}
+.maplinks a{display:block;padding:.55rem .75rem;background:#fff;border:1px solid var(--line);
+  border-radius:2px;text-decoration:none;color:var(--basalt);font-size:.88rem}
+.maplinks a span{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;
+  color:var(--meltwater);margin-top:.15rem}
+@media print{#map,.mapbar{display:none}}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-top:.8rem}
+.chiplbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--slate);margin-right:.3rem}
+.chips a{display:inline-flex;align-items:center;gap:.35rem;padding:.28rem .6rem;
+  background:#fff;border:1px solid var(--line);border-radius:100px;
+  font-size:.8rem;text-decoration:none;color:var(--basalt)}
+.chips a::before{content:"";width:11px;height:11px;flex:0 0 11px;border-radius:2px;
+  background:var(--meltwater);
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>') center/contain no-repeat;
+  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>') center/contain no-repeat}
+.chips a:hover{border-color:var(--meltwater);background:#fff}
+@media print{.chips{display:none}}
+
+details.legs{margin-top:.9rem;border-top:1px solid var(--line);padding-top:.6rem}
+details.legs summary{cursor:pointer;font-family:var(--mono);font-size:.7rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--meltwater);list-style:none}
+details.legs summary::-webkit-details-marker{display:none}
+details.legs summary::before{content:"+ ";font-weight:600}
+details.legs[open] summary::before{content:"\2212 "}
+table.legtable{margin:.7rem 0 0;font-size:.86rem}
+table.legtable td{padding:.35rem .6rem;border-bottom:1px solid var(--line)}
+table.legtable tr.tot td{font-weight:600;border-top:1px solid var(--ash);border-bottom:none}
+p.altnote{font-family:var(--mono);font-size:.7rem;letter-spacing:.06em;color:var(--rust);margin:.5rem 0 0}
+@media print{details.legs{display:block}details.legs summary{display:none}}
+#map{height:min(72vh,640px);border-radius:3px;background:var(--glacier-deep);z-index:1}
+.mapbar{display:flex;flex-wrap:wrap;gap:.35rem;margin:0 0 .9rem}
+.mapbar button{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+  padding:.35rem .7rem;border:1px solid var(--line);background:#fff;color:var(--slate);
+  border-radius:2px;cursor:pointer}
+.mapbar button:hover{border-color:var(--meltwater);color:var(--basalt)}
+.mapbar button[aria-pressed="true"]{background:var(--basalt);color:var(--glacier);border-color:var(--basalt)}
+.pin{display:flex;align-items:center;justify-content:center;border-radius:50%;
+  color:#fff;font-family:var(--mono);font-size:.7rem;font-weight:500;
+  border:2px solid rgba(255,255,255,.85);box-shadow:0 1px 4px rgba(0,0,0,.35)}
+.leaflet-popup-content{font-family:var(--body);font-size:.9rem;margin:.7rem .9rem}
+.leaflet-popup-content b{font-family:var(--display);display:block;margin-bottom:.15rem}
+.leaflet-popup-content .d{font-family:var(--mono);font-size:.64rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--meltwater);display:block;margin-bottom:.3rem}
+.leaflet-popup-content a{font-family:var(--mono);font-size:.66rem;letter-spacing:.06em;
+  text-transform:uppercase;display:inline-block;margin-top:.5rem}
+.maplinks{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:.5rem;margin-top:1.2rem}
+.maplinks a{display:block;padding:.55rem .75rem;background:#fff;border:1px solid var(--line);
+  border-radius:2px;text-decoration:none;color:var(--basalt);font-size:.88rem}
+.maplinks a span{display:block;font-family:var(--mono);font-size:.62rem;letter-spacing:.08em;
+  color:var(--meltwater);margin-top:.15rem}
+@media print{#map,.mapbar{display:none}}
+.chips{display:flex;flex-wrap:wrap;gap:.35rem;align-items:center;margin-top:.8rem}
+.chiplbl{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+  color:var(--slate);margin-right:.3rem}
+.chips a{display:inline-flex;align-items:center;gap:.35rem;padding:.28rem .6rem;
+  background:#fff;border:1px solid var(--line);border-radius:100px;
+  font-size:.8rem;text-decoration:none;color:var(--basalt)}
+.chips a::before{content:"";width:11px;height:11px;flex:0 0 11px;border-radius:2px;
+  background:var(--meltwater);
+  -webkit-mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>') center/contain no-repeat;
+  mask:url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 2C8.1 2 5 5.1 5 9c0 5.2 7 13 7 13s7-7.8 7-13c0-3.9-3.1-7-7-7zm0 9.5A2.5 2.5 0 1112 6.5a2.5 2.5 0 010 5z"/></svg>') center/contain no-repeat}
+.chips a:hover{border-color:var(--meltwater);background:#fff}
+@media print{.chips{display:none}}
+</style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="eyebrow">Thirteen days by car · August</div>
+    <h1>Iceland<em>The Ring Road and Snæfellsnes, planned around the light</em></h1>
+    <p class="standfirst">One road, 1,322 kilometres, all the way round — plus Tröllaskagi and the peninsula they call Iceland in miniature. Anticlockwise over twelve nights: south coast first, glaciers on day four, the east fjords nobody bothers with, Stuðlagil, a rest day at Mývatn, and home through Snæfellsnes.</p>
+    <div class="masthead-meta">
+      <span>~2,810 km with detours</span><span>12 nights</span><span>2 adults · 3 children</span>
+    </div>
+
+    <div class="ribbon-wrap">
+      <div class="mono" style="color:rgba(237,241,242,.5);margin-bottom:.7rem">A day in mid-August · how to read the bars below</div>
+      <div class="ribbon" id="key-ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:10.53%;width:10.53%">Shooting</div><div class="block drive" style="left:36.84%;width:21.05%">Driving</div><div class="block" style="left:82.11%;width:10.53%">Shooting</div></div>
+      <div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="ribbon-key">
+        <span><i class="sw" style="background:#0A0D10"></i>Dark</span>
+        <span><i class="sw" style="background:#1E2A38"></i>Twilight</span>
+        <span><i class="sw" style="background:linear-gradient(180deg,#D9A441,#BF7E30)"></i>Golden hour</span>
+        <span><i class="sw" style="background:#C9DAE1"></i>Full daylight</span>
+        <span><i class="sw" style="background:rgba(20,24,28,.82);border-left:2px solid #D9A441"></i>Where we'll be</span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<nav class="dayNav" aria-label="Jump to day">
+  <div class="wrap">
+    <a href="#map-section">Map</a>
+    <a href="#light">The light</a>
+    <a href="#d1">1 · Golden Circle</a>
+    <a href="#d2">2 · Seljalandsfoss</a>
+    <a href="#d3">3 · Vík</a>
+    <a href="#d4">4 · Skaftafell</a>
+    <a href="#d5">5 · Jökulsárlón</a>
+    <a href="#d6">6 · East Fjords</a>
+    <a href="#d7">7 · Stuðlagil</a>
+    <a href="#d8">8 · Mývatn</a>
+    <a href="#d9">9 · Tröllaskagi</a>
+    <a href="#d10">10 · Skagafjörður</a>
+    <a href="#d11">11 · Snæfellsnes</a>
+    <a href="#d12">12 · Reykjavík</a>
+    <a href="#driving">Driving</a>
+    <a href="#booking">Booking</a>
+    <a href="#budget">Budget</a>
+  </div>
+</nav>
+
+<section id="map-section">
+  <div class="wrap">
+    <div class="kicker">Every stop, plotted</div>
+    <h2>The map</h2>
+    <p class="lede">All 58 stops, coloured by day, with the route drawn between them. Tap any day to isolate it; tap a pin for what we're doing there and a link straight through to Google Maps, where that place's photos live. The same links sit under every day below.</p>
+    <div class="mapbar" id="mapbar"></div>
+    <div id="map"></div>
+    <p style="font-size:.85rem;color:var(--slate);margin-top:.8rem">Map data © OpenStreetMap contributors. Needs a connection — offline, this panel stays blank and the rest of the page is unaffected.</p>
+    <h3>Turn-by-turn, one day at a time</h3>
+    <p>Each day opens in Google Maps with every stop loaded as a waypoint, starting from the hotel you woke up in — so the distance Google reports matches the tables above.</p>
+    <div class="maplinks" id="maplinks"></div>
+  </div>
+</section>
+
+<section id="light">
+  <div class="wrap">
+    <div class="kicker">Why the days are shaped this way</div>
+    <h2>The light does the planning</h2>
+    <p class="lede">In August the Icelandic sun tracks low and shallow rather than dropping vertically. Golden hour lasts ninety minutes or more instead of sixty, and there are two of them a day, separated by a long, flat, crowded middle. So we shoot at the edges and drive through the middle.</p>
+
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Date</th><th>Sunrise</th><th>Sunset</th><th>Best light</th></tr></thead>
+      <tbody>
+        <tr><td>1 August</td><td class="num">04:45</td><td class="num">22:15</td><td>04:45–06:30 · 20:30–22:15</td></tr>
+        <tr><td>15 August</td><td class="num">05:15</td><td class="num">21:35</td><td>05:15–06:45 · 19:50–21:35</td></tr>
+        <tr><td>31 August</td><td class="num">05:55</td><td class="num">20:45</td><td>05:55–07:15 · 19:00–20:45</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:.9rem;color:var(--slate)">Times are for the southwest. The north — Akureyri, Mývatn — runs about fifteen minutes later at sunset. The bars throughout this page use mid-August.</p>
+
+    <ul class="clean">
+      <li><strong>05:00–08:00</strong> — the money window. Empty sites, warm side-light, no coaches. Jökulsárlón, Hverir and Reynisfjara belong here.</li>
+      <li><strong>11:00–17:00</strong> — flat, harsh and busy. Driving, the glacier walk, boat trips, geothermal pools, lunch. Never waterfalls.</li>
+      <li><strong>17:00–22:00</strong> — the second window. Seljalandsfoss, Vestrahorn, Goðafoss, Kirkjufell.</li>
+    </ul>
+    <p>Three early mornings across twelve days — days 3, 5 and 7 — will produce more keepers than ten days of shooting at noon.</p>
+
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Day</th><th>Route</th><th>Driving</th><th>Where we sleep</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>Keflavík → Þingvellir → Geysir → Gullfoss → Laugarvatn</td><td class="num">200 km</td><td>Torfhús Retreat</td></tr>
+        <tr><td class="num">2</td><td>Laugarvatn → Flúðir → Hella</td><td class="num">170 km</td><td>Hotel Rangá</td></tr>
+        <tr><td class="num">3</td><td>Hella → Skógar → Sólheimajökull → Vík</td><td class="num">120 km</td><td>Hótel Kría, Vík</td></tr>
+        <tr><td class="num">4</td><td>Vík → Fjaðrárgljúfur → Kirkjubæjarklaustur → Skaftafell → Hof</td><td class="num">185 km</td><td>Fosshotel Glacier Lagoon</td></tr>
+        <tr><td class="num">5</td><td>Hof → Jökulsárlón → Höfn → Stokksnes</td><td class="num">155 km</td><td>Hótel Höfn</td></tr>
+        <tr><td class="num">6</td><td>Höfn → Djúpivogur → Stöðvarfjörður → Seyðisfjörður → Egilsstaðir</td><td class="num">315 km</td><td>Lake Hótel Egilsstaðir</td></tr>
+        <tr><td class="num">7</td><td>Egilsstaðir → Hengifoss → Stuðlagil → Möðrudalur → Dettifoss → Mývatn</td><td class="num">350 km</td><td>Fosshótel Mývatn</td></tr>
+        <tr><td class="num">8</td><td>Mývatn → Húsavík → Ásbyrgi → Dimmuborgir → Mývatn</td><td class="num">190 km</td><td>Fosshótel Mývatn — second night</td></tr>
+        <tr><td class="num">9</td><td>Mývatn → Goðafoss → Akureyri → Siglufjörður → Hofsós → Sauðárkrókur</td><td class="num">315 km</td><td>Hótel Tindastóll, Sauðárkrókur</td></tr>
+        <tr><td class="num">10</td><td>Sauðárkrókur → Glaumbær → Kolugljúfur → Hvítserkur → Eiríksstaðir → Stykkishólmur</td><td class="num">380 km</td><td>Fosshotel Stykkishólmur</td></tr>
+        <tr><td class="num">11</td><td>Stykkishólmur → Kirkjufell → Snæfellsjökull → Djúpalónssandur → Arnarstapi → Búðir</td><td class="num">165 km</td><td>Hótel Búðir</td></tr>
+        <tr><td class="num">12</td><td>Búðir → Borgarnes → Deildartunguhver → Hraunfossar → Reykjavík</td><td class="num">265 km</td><td>The Reykjavík EDITION</td></tr>
+      </tbody>
+    </table>
+    </div>
+    <p style="font-size:.9rem;color:var(--slate)">Twelve nights, thirteen calendar days — we fly home on the morning of day thirteen.</p>
+  </div>
+</section>
+
+
+  <section class="day reveal" id="d1">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">01</div>
+        <div>
+          <h2 class="day-title">Arrival and the Golden Circle</h2>
+          <div class="day-route">Keflavík → Þingvellir → Geysir → Gullfoss → Laugarvatn · 200 km · 2h50</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block drive" style="left:47.37%;width:10.53%">Drive east</div><div class="block" style="left:57.89%;width:10.53%">Þingvellir</div><div class="block" style="left:68.42%;width:4.21%">Geysir</div><div class="block" style="left:73.68%;width:5.26%">Gullfoss</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>13:00–15:00</b> Drive east</div><div><b>15:00–17:00</b> Þingvellir</div><div><b>17:00–17:48</b> Geysir</div><div><b>18:00–19:00</b> Gullfoss</div></div>
+      <details class="legs"><summary>Driving · 200 km · 2h50</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Keflavík → Þingvellir</td><td class="num">85 km</td><td class="num">1h05</td></tr><tr><td>Þingvellir → Geysir</td><td class="num">60 km</td><td class="num">50 min</td></tr><tr><td>Geysir → Gullfoss</td><td class="num">10 km</td><td class="num">10 min</td></tr><tr><td>Gullfoss → Torfhús</td><td class="num">45 km</td><td class="num">40 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">200 km</td><td class="num">2h50</td></tr>
+    </tbody></table></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=%C3%9Eingvellir%20National%20Park&amp;query_place_id=ChIJe2kT-x-B1kgR8mKSB4tsdWs">Þingvellir National Park</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Fri%C3%B0heimar&amp;query_place_id=ChIJbYLfYPmW1kgRTV6VqpYHPN4">Friðheimar</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Geysir&amp;query_place_id=ChIJH9zZM-yj1kgR5Xfp_dooi9o">Geysir</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Gullfoss&amp;query_place_id=ChIJybZFr3Sl1kgRARZBC9tHYyw">Gullfoss</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Torfh%C3%BAs%20Retreat&amp;query_place_id=ChIJde8kvJW91kgRtmedHsjiPfc">Torfhús Retreat</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Þingvellir National Park<span class="t">1.5–2 hours</span></h3><p>The rift valley where the North American and Eurasian plates pull apart at about two centimetres a year, and the site of the Alþingi, the parliament founded here in 930 AD. Walk the Almannagjá gorge down from the upper car park to Öxarárfoss — the wall on your left is the literal edge of a continent. Afternoon side-light fills the gorge.</p>
+          <h3>Geysir<span class="t">45 minutes</span></h3><p>Geysir itself is dormant, but Strokkur beside it erupts every six to ten minutes to fifteen or twenty metres. Stand with the sun behind you and wait out two or three cycles. The water domes into a blue bubble about a second before it goes, and that is the photograph.</p>
+          <h3>Gullfoss<span class="t">1 hour</span></h3><p>A two-tier fall dropping into a canyon. Lower platform first, then the upper path, where afternoon sun puts a rainbow in the spray. Bring a cloth for the lens.</p>
+          <h3>Eating</h3><p><strong>Friðheimar</strong> — lunch inside a geothermally heated tomato greenhouse. Tomato soup with endless sourdough, tomato beer, tomato schnapps, and a great favourite with children. It sells out weeks ahead, so book the day we fix our dates. Dinner in Torfhús's own dining room, reserved with the room.</p>
+          
+          <div class="hotel">
+            <div class="lbl">Night 1</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.torfhus.is">Torfhús Retreat</a></div>
+            <p>Twenty-five turf-roofed suites built on Viking principles, each with its own basalt geothermal tub looking across the volcanic plain to Langjökull. The most distinctive place to stay in South Iceland and the right way to begin.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot solo">
+              <div class="ph">Gullfoss — two tiers, thirty-two metres into the canyon</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gullfoss%2C%20an%20iconic%20waterfall%20of%20Iceland.jpg?width=1200" alt="Gullfoss — two tiers, thirty-two metres into the canyon" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Gullfoss — two tiers, thirty-two metres into the canyon · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Gullfoss%2C%20an%20iconic%20waterfall%20of%20Iceland.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d2">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">02</div>
+        <div>
+          <h2 class="day-title">Kerið, hot springs and the first waterfall</h2>
+          <div class="day-route">Laugarvatn → Flúðir → Hella · 170 km · 2h20 · a deliberately short day</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:31.58%;width:3.16%">Kerið</div><div class="block" style="left:36.84%;width:7.89%">Secret Lagoon</div><div class="block drive" style="left:50.00%;width:7.89%">Drive</div><div class="block" style="left:81.58%;width:9.47%">Seljalandsfoss</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>10:00–10:36</b> Kerið</div><div><b>11:00–12:30</b> Secret Lagoon</div><div><b>13:30–15:00</b> Drive</div><div><b>19:30–21:18</b> Seljalandsfoss</div></div>
+      <details class="legs"><summary>Driving · 170 km · 2h20</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Torfhús → Kerið</td><td class="num">30 km</td><td class="num">25 min</td></tr><tr><td>Kerið → Secret Lagoon</td><td class="num">25 km</td><td class="num">25 min</td></tr><tr><td>Secret Lagoon → Hella</td><td class="num">45 km</td><td class="num">40 min</td></tr><tr><td>Hella → Seljalandsfoss</td><td class="num">35 km</td><td class="num">25 min</td></tr><tr><td>Seljalandsfoss → Rangá</td><td class="num">35 km</td><td class="num">25 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">170 km</td><td class="num">2h20</td></tr>
+    </tbody></table></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Keri%C3%B0%20Crater&amp;query_place_id=ChIJV_L2VbeL1kgRB9kuweBEWlE">Kerið Crater</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Secret%20Lagoon%2C%20Fl%C3%BA%C3%B0ir&amp;query_place_id=ChIJAzrP-_OV1kgRqbTTIAgihLo">Secret Lagoon, Flúðir</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Seljalandsfoss&amp;query_place_id=ChIJFSTv6K0e10gRjRcJUiDmAa4">Seljalandsfoss</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Hotel%20Rang%C3%A1&amp;query_place_id=ChIJc06uU5fk1kgR_NgCxEZIBDs">Hotel Rangá</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Kerið crater<span class="t">30 minutes</span></h3><p>A fifty-five metre volcanic caldera with near-vertical red scoria walls and an opaque aquamarine lake at the bottom. Walk the rim, then take the steps down to the water. Overcast actually helps here — the red rock saturates.</p>
+          <h3>Secret Lagoon, Flúðir<span class="t">1.5 hours</span></h3><p>Iceland's oldest swimming pool, built in 1891, fed by hot springs, with a small geyser going off alongside every few minutes. Far more atmospheric than the Blue Lagoon and a fraction of the price.</p>
+          <h3>Seljalandsfoss and Gljúfrabúi<span class="t">1.5 hours, arrive 19:30</span></h3><p>A sixty-metre fall you can walk behind. It faces west, so in the evening the sun sits inside the water curtain and the whole thing lights up from within. This is exactly why today is short — we want to be standing behind it at eight, not at noon with two hundred other people. Everyone gets soaked. Then five minutes north to Gljúfrabúi, hidden inside a slot canyon, where you wade a shallow stream in and shoot up at the shaft of light.</p>
+          <h3>Eating</h3><p>Restaurant 4 at Hotel Rangá — Icelandic lamb, langoustine, reindeer, and an unusually deep wine list. Icelandic dinner service is early by our standards, so either eat at 18:30 and go out for the Seljalandsfoss window, or eat at 21:30 afterwards.</p>
+          <div class="note"><p><strong>The long zipline slots in here if you want it.</strong> Mega Zipline at Hveragerði runs a kilometre from the Kambar plateau across the Svartagljúfur gorge, forty-five minutes south of Torfhús — and today is the light day that can absorb a three-hour morning. Confirm the age and weight limits before building around it; the four-line Vík course is the gentler family alternative on day 3.</p></div>
+          <div class="hotel">
+            <div class="lbl">Night 2</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.hotelranga.is">Hotel Rangá</a></div>
+            <p>The best countryside hotel in South Iceland. Continent-themed suites, an on-site observatory, and Restaurant 4 — the finest food we will eat outside Reykjavík.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot">
+              <div class="ph">Seljalandsfoss — the fall you walk behind</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Seljalandsfoss%20waterfall%20(Iceland)%20(16096296723).jpg?width=1200" alt="Seljalandsfoss — the fall you walk behind" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Seljalandsfoss — the fall you walk behind · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Seljalandsfoss%20waterfall%20(Iceland)%20(16096296723).jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+          <figure>
+            <div class="shot">
+              <div class="ph">Gljúfrabúi, hidden inside its slot canyon</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Gljufrafoss%2C%20Iceland%2C%2020230501%201347%203956.jpg?width=1200" alt="Gljúfrabúi, hidden inside its slot canyon" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Gljúfrabúi, hidden inside its slot canyon · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Gljufrafoss%2C%20Iceland%2C%2020230501%201347%203956.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d3">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">03</div>
+        <div>
+          <h2 class="day-title">Skógafoss, a glacier walk, black beaches</h2>
+          <div class="day-route">Hella → Skógar → Sólheimajökull → Vík · 120 km · 1h50</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:26.32%;width:5.26%">Skógafoss</div><div class="block drive" style="left:39.47%;width:15.79%">Glacier walk</div><div class="block" style="left:68.42%;width:5.26%">Dyrhólaey</div><div class="block" style="left:78.95%;width:7.89%">Reynisfjara</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>09:00–10:00</b> Skógafoss</div><div><b>11:30–14:30</b> Glacier walk</div><div><b>17:00–18:00</b> Dyrhólaey</div><div><b>19:00–20:30</b> Reynisfjara</div></div>
+      <details class="legs"><summary>Driving · 120 km · 1h50</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Rangá → Skógafoss</td><td class="num">55 km</td><td class="num">40 min</td></tr><tr><td>Skógafoss → Sólheimajökull</td><td class="num">15 km</td><td class="num">15 min</td></tr><tr><td>Sólheimajökull → Dyrhólaey</td><td class="num">25 km</td><td class="num">25 min</td></tr><tr><td>Dyrhólaey → Reynisfjara</td><td class="num">12 km</td><td class="num">15 min</td></tr><tr><td>Reynisfjara → Vík</td><td class="num">10 km</td><td class="num">10 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">120 km</td><td class="num">1h50</td></tr>
+    </tbody></table></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Sk%C3%B3gafoss&amp;query_place_id=ChIJFYylOXY710gRSHn-zR_HYA8">Skógafoss</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=S%C3%B3lheimaj%C3%B6kull&amp;query_place_id=ChIJSXrZaFcw10gRNvldSdyBK1s">Sólheimajökull</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Dyrh%C3%B3laey&amp;query_place_id=ChIJk9IcF7JJ10gR6yJHDvMw6P0">Dyrhólaey</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Reynisfjara%20Iceland&amp;query=63.4033,-19.0448">Reynisfjara</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=H%C3%B3tel%20Kr%C3%ADa%2C%20V%C3%ADk&amp;query_place_id=ChIJzWdYRE9K10gRQjt8rYQbomY">Hótel Kría, Vík</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Skógafoss<span class="t">1 hour, arrive by 09:30</span></h3><p>Sixty metres wide with twenty-five metres of drop, and it faces south — so the sun is behind you through the late morning and a full rainbow sits in the spray. Shoot from the base for scale, then climb the 527 steps for the view from the lip.</p>
+          <h3>Sólheimajökull glacier walk<span class="t">3 hours with a guide</span></h3><p>An outlet tongue of Mýrdalsjökull, crevassed and streaked with volcanic ash. This is the midday activity — harsh light doesn't matter on blue ice, and nobody walks on a glacier unguided, ever. Check the minimum age; most operators set it at eight or ten.</p>
+          <h3>Dyrhólaey<span class="t">1 hour, 17:00</span></h3><p>A promontory with a sea arch big enough to sail a boat through and a lighthouse on top. Puffins nest here through mid-August and usually leave in the second half of the month. The upper viewpoint looks east down the whole black coastline.</p>
+          <h3>Reynisfjara<span class="t">1 hour, 19:00</span></h3><p>The hexagonal basalt columns and the Reynisdrangar sea stacks, warm in evening light with the crowds thinning.</p>
+          <h3>Eating</h3><p>Smiðjan Brugghús in Vík — a brewpub doing the best burgers on the south coast, no reservations, go early. Suður-Vík for a proper sit-down dinner. The Soup Company for a fast, warm lunch.</p>
+          <div class="note"><p><strong>The one genuinely dangerous stop on the route.</strong> Sneaker waves at Reynisfjara have killed visitors, including in recent years. Nobody turns their back on the water, nobody stands on wet sand, and we read the danger board before walking down. This is where the children stay within arm's reach.</p></div>
+          <div class="hotel">
+            <div class="lbl">Night 3</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.hotelkria.is">Hótel Kría, Vík</a></div>
+            <p>Modern, built in 2018, walkable to the black beach and the best-placed property in the village. Vík has no true luxury option — this is the top of the market there.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot">
+              <div class="ph">Skógafoss — rainbow in the spray, late morning</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Iceland%20skogafoss.jpg?width=1200" alt="Skógafoss — rainbow in the spray, late morning" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Skógafoss — rainbow in the spray, late morning · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Iceland%20skogafoss.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+          <figure>
+            <div class="shot">
+              <div class="ph">Reynisfjara and the Reynisdrangar sea stacks</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Reynisfjara%20and%20Reynisdrangar%2C%20Iceland.jpg?width=1200" alt="Reynisfjara and the Reynisdrangar sea stacks" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Reynisfjara and the Reynisdrangar sea stacks · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Reynisfjara%20and%20Reynisdrangar%2C%20Iceland.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d4">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">04</div>
+        <div>
+          <h2 class="day-title">Canyons, lava fields, into glacier country</h2>
+          <div class="day-route">Vík → Fjaðrárgljúfur → Kirkjubæjarklaustur → Skaftafell → Hof · 185 km · 2h20</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:31.58%;width:7.89%">Fjaðrárgljúfur</div><div class="block" style="left:42.11%;width:5.26%">Klaustur lunch</div><div class="block drive" style="left:50.00%;width:5.26%">Eldhraun</div><div class="block" style="left:57.89%;width:13.16%">Skaftafell</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>10:00–11:30</b> Fjaðrárgljúfur</div><div><b>12:00–13:00</b> Klaustur lunch</div><div><b>13:30–14:30</b> Eldhraun</div><div><b>15:00–17:30</b> Skaftafell</div></div>
+      <details class="legs"><summary>Driving · 185 km · 2h20</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Vík → Fjaðrárgljúfur</td><td class="num">75 km</td><td class="num">55 min</td></tr><tr><td>Fjaðrárgljúfur → Kirkjubæjarklaustur</td><td class="num">15 km</td><td class="num">12 min</td></tr><tr><td>Klaustur → Skaftafell</td><td class="num">70 km</td><td class="num">50 min</td></tr><tr><td>Skaftafell → Hof</td><td class="num">25 km</td><td class="num">20 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">185 km</td><td class="num">2h20</td></tr>
+    </tbody></table></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Fja%C3%B0r%C3%A1rglj%C3%BAfur&amp;query_place_id=ChIJ3ZFCWfDl0EgRvbVlccHsIKQ">Fjaðrárgljúfur</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Kirkjub%C3%A6jarklaustur%20Iceland&amp;query=63.791,-18.06">Kirkjubæjarklaustur</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Svartifoss%2C%20Skaftafell&amp;query_place_id=ChIJV6KJ4M810EgR11NlQqEPJ-M">Svartifoss, Skaftafell</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Fosshotel%20Glacier%20Lagoon%20Iceland&amp;query=63.9906,-16.701">Fosshotel Glacier Lagoon</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Fjaðrárgljúfur canyon<span class="t">1.5 hours</span></h3><p>A hundred-metre-deep, two-kilometre serpentine gorge carved by a glacial river, with a rim path and platforms. Deep canyons need high sun to reach the floor, so this is a genuine midday site.</p>
+          <h3>Eldhraun lava field<span class="t">30 minutes, roadside</span></h3><p>The moss-covered aftermath of the Laki eruption of 1783–84, which killed a quarter of Iceland's population and cooled the entire Northern Hemisphere. The moss takes decades to recover from a single footprint — photograph from the pull-offs and stay off it.</p>
+          <h3>Skaftafell and Svartifoss<span class="t">2.5 hours</span></h3><p>A 1.5 km walk uphill to a waterfall framed by black hexagonal basalt columns — the same shapes that inspired the ceiling of Hallgrímskirkja in Reykjavík.</p>
+          <h3>Eating</h3><p>Systrakaffi at Kirkjubæjarklaustur for lunch. Jón Ríki, a farmhouse restaurant with its own brewery east of Hof. Brunnhóll for farm-made ice cream. Book the Fosshotel dinner table when we book the room — it fills.</p>
+          
+          <div class="hotel">
+            <div class="lbl">Night 4</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.islandshotel.is/hotels-in-iceland/fosshotel-glacier-lagoon">Fosshotel Glacier Lagoon</a></div>
+            <p>The best hotel in the glacier zone by a distance — wood-clad, floor-to-ceiling glass, sauna and hot tubs, positioned exactly between Skaftafell and Jökulsárlón. The hardest booking on the whole route.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot">
+              <div class="ph">Fjaðrárgljúfur — two kilometres of serpentine gorge</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fjadr%C3%A1rglj%C3%BAfur-pjt.jpg?width=1200" alt="Fjaðrárgljúfur — two kilometres of serpentine gorge" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Fjaðrárgljúfur — two kilometres of serpentine gorge · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Fjadr%C3%A1rglj%C3%BAfur-pjt.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+          <figure>
+            <div class="shot">
+              <div class="ph">Svartifoss, framed in black basalt columns</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/038%20Svartifoss%20waterfall%20(Iceland)%20Photo%20by%20Giles%20Laurent.jpg?width=1200" alt="Svartifoss, framed in black basalt columns" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Svartifoss, framed in black basalt columns · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:038%20Svartifoss%20waterfall%20(Iceland)%20Photo%20by%20Giles%20Laurent.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d5">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">05</div>
+        <div>
+          <h2 class="day-title">Jökulsárlón at sunrise, Vestrahorn at sunset</h2>
+          <div class="day-route">Hof → Jökulsárlón → Höfn → Stokksnes · 155 km · 2h15</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:7.89%;width:10.53%">Jökulsárlón</div><div class="block" style="left:18.42%;width:5.26%">Diamond Beach</div><div class="block" style="left:28.95%;width:5.26%">Fjallsárlón</div><div class="block" style="left:42.11%;width:5.26%">Zodiac</div><div class="block" style="left:81.58%;width:10.53%">Vestrahorn</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>05:30–07:30</b> Jökulsárlón</div><div><b>07:30–08:30</b> Diamond Beach</div><div><b>09:30–10:30</b> Fjallsárlón</div><div><b>12:00–13:00</b> Zodiac</div><div><b>19:30–21:30</b> Vestrahorn</div></div>
+      <details class="legs"><summary>Driving · 155 km · 2h15</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Hof → Jökulsárlón</td><td class="num">30 km</td><td class="num">25 min</td></tr><tr><td>Jökulsárlón → Diamond Beach</td><td class="num">1 km</td><td class="num">2 min</td></tr><tr><td>Diamond Beach → Fjallsárlón</td><td class="num">15 km</td><td class="num">12 min</td></tr><tr><td>Fjallsárlón → Höfn</td><td class="num">80 km</td><td class="num">1h</td></tr><tr><td>Höfn → Stokksnes → Höfn</td><td class="num">30 km</td><td class="num">30 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">155 km</td><td class="num">2h15</td></tr>
+    </tbody></table></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=J%C3%B6kuls%C3%A1rl%C3%B3n&amp;query_place_id=ChIJGTg61-zWz0gRqUYB4VnJBc0">Jökulsárlón</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Diamond%20Beach&amp;query_place_id=ChIJocOAuPPXz0gR_01cgn2X9j0">Diamond Beach</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Fjalls%C3%A1rl%C3%B3n&amp;query_place_id=ChIJqQd7WFko0EgRLNqgFLyMiIg">Fjallsárlón</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Stokksnes%20%2F%20Vestrahorn&amp;query_place_id=ChIJ8xBJ5xSqz0gReCRozzI48i0">Stokksnes / Vestrahorn</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=H%C3%B3tel%20H%C3%B6fn&amp;query_place_id=ChIJz0YrB1isz0gRV6HnWEMUBQI">Hótel Höfn</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Alarm at 04:45</h3><p>This is the early morning that justifies itself.</p>
+          <h3>Jökulsárlón glacier lagoon<span class="t">2 hours, 05:30–07:30</span></h3><p>Icebergs calved from Breiðamerkurjökull drifting through a tidal lagoon toward the sea. At sunrise the sun comes up over the ocean to the east and lights the ice from behind — the bergs glow blue and there is nobody there. By ten there are four coach parks full.</p>
+          <h3>Diamond Beach<span class="t">1 hour</span></h3><p>Directly across the road. Bergs wash out through the channel and strand on black sand, backlit by the low sun. Shoot low and fast as the waves recede; a falling tide leaves the most ice.</p>
+          <h3>Fjallsárlón<span class="t">1 hour</span></h3><p>The smaller, quieter lagoon ten kilometres west, with the glacier wall much closer to you. Fewer people and arguably the better composition.</p>
+          <h3>Zodiac among the icebergs<span class="t">1 hour, midday</span></h3><p>The RIB takes you right in among the bergs and out to the glacier face — better than the amphibious boat, and the highlight of the trip for most children. Minimum age usually six.</p>
+          <h3>Vestrahorn at Stokksnes<span class="t">2 hours, from 19:30</span></h3><p>A 454-metre serrated massif rising straight out of a black sand spit, with tidal flats that mirror it when the water is still. The finest single photographic location in Iceland, at its best in evening light — and, tellingly, absent from every packaged Ring Road tour. There is a mock Viking film-set village on site. The wind can be severe: weight the tripod.</p>
+          <h3>Eating</h3><p><strong>Pakkhús</strong> in Höfn — a restored 1932 warehouse on the harbour, and the best table in the langoustine capital. Otto Matur & Drykkur is the more elegant alternative. Íshúsið Pizzeria for something fast after Stokksnes.</p>
+          
+          <div class="hotel">
+            <div class="lbl">Night 5</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.hotelhofn.is">Hótel Höfn</a></div>
+            <p>The best in town, comfortable and well run rather than luxurious, and fifteen minutes from Vestrahorn. Honest note: the Höfn market tops out here.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot">
+              <div class="ph">Jökulsárlón — icebergs drifting toward the sea</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/J%C3%B6kuls%C3%A1rl%C3%B3n%20(3587109332).jpg?width=1200" alt="Jökulsárlón — icebergs drifting toward the sea" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Jökulsárlón — icebergs drifting toward the sea · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:J%C3%B6kuls%C3%A1rl%C3%B3n%20(3587109332).jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+          <figure>
+            <div class="shot">
+              <div class="ph">Fjallsárlón, the quieter lagoon ten kilometres west</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Fjallsarlon%20-%20Iceberg%20Lagoon.jpg?width=1200" alt="Fjallsárlón, the quieter lagoon ten kilometres west" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Fjallsárlón, the quieter lagoon ten kilometres west · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Fjallsarlon%20-%20Iceberg%20Lagoon.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d6">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">06</div>
+        <div>
+          <h2 class="day-title">The East Fjords</h2>
+          <div class="day-route">Höfn → Djúpivogur → Stöðvarfjörður → Seyðisfjörður → Egilsstaðir · 315 km · 4h15</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:28.95%;width:5.26%">Djúpivogur</div><div class="block" style="left:36.84%;width:3.95%">Petra's stones</div><div class="block drive" style="left:44.74%;width:7.89%">Fjord driving</div><div class="block" style="left:57.89%;width:10.53%">Seyðisfjörður</div><div class="block" style="left:81.58%;width:7.89%">Vök Baths</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>09:30–10:30</b> Djúpivogur</div><div><b>11:00–11:45</b> Petra's stones</div><div><b>12:30–14:00</b> Fjord driving</div><div><b>15:00–17:00</b> Seyðisfjörður</div><div><b>19:30–21:00</b> Vök Baths</div></div>
+      <details class="legs"><summary>Driving · 315 km · 4h15</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Höfn → Djúpivogur</td><td class="num">104 km</td><td class="num">1h20</td></tr><tr><td>Djúpivogur → Stöðvarfjörður</td><td class="num">60 km</td><td class="num">50 min</td></tr><tr><td>Stöðvarfjörður → Egilsstaðir</td><td class="num">85 km</td><td class="num">1h10</td></tr><tr><td>Egilsstaðir → Seyðisfjörður → back</td><td class="num">54 km</td><td class="num">1h</td></tr><tr><td>Egilsstaðir → Vök Baths</td><td class="num">10 km</td><td class="num">10 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">315 km</td><td class="num">4h15</td></tr>
+    </tbody></table></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Dj%C3%BApivogur&amp;query_place_id=ChIJfSM0kYvDzkgRUFSQwxsZDT0">Djúpivogur</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Petra's%20Stone%20Collection&amp;query_place_id=ChIJt_HbQGe1zkgRE3ogPnD35sw">Petra's Stone Collection</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Sey%C3%B0isfj%C3%B6r%C3%B0ur&amp;query_place_id=ChIJzYTuf_3-y0gRWWIMJVyCbIM">Seyðisfjörður</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=V%C3%B6k%20Baths&amp;query_place_id=ChIJEVOgoWkFzEgRyiNsXk2lzvg">Vök Baths</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Lake%20H%C3%B3tel%20Egilssta%C3%B0ir&amp;query_place_id=ChIJ7yM9Y4IEzEgRvuPGSnX-H6o">Lake Hótel Egilsstaðir</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>The day people skip</h3><p>And shouldn't. The road threads fjord after fjord with almost no traffic, sheer walls on one side and water on the other, and reindeer on the slopes — East Iceland is the only place in the country they live wild.</p>
+          <h3>Petra's Stone Collection, Stöðvarfjörður<span class="t">45 minutes</span></h3><p>One woman's lifetime accumulation of Icelandic minerals, filling a house and its garden. Odd, personal, unexpectedly moving, and very good with children.</p>
+          <h3>Seyðisfjörður<span class="t">2 hours, over the Fjarðarheiði pass</span></h3><p>The detour of the trip. A blue-and-white wooden church at the end of a rainbow-painted street, sheer mountains, waterfalls down every wall. The pass climbs hard and the view descending into the fjord is the postcard.</p>
+          <h3>Vök Baths<span class="t">1.5 hours, evening</span></h3><p>Floating geothermal pools set into Lake Urriðavatn — the only pools in Iceland fed by certified drinkable hot spring water. Go at sunset.</p>
+          <h3>Eating</h3><p>Norð Austur Sushi & Bar in Seyðisfjörður — summer only, fish landed hours earlier, one of the best meals on the island. Skaftfell Bistro for something casual. In Egilsstaðir, Nielsen Restaurant is the fine-dining anchor, though it was closed and due to reopen in summer 2026 — confirm before counting on it. Glóð and Salt Café are the reliable alternatives.</p>
+          
+          <div class="hotel">
+            <div class="lbl">Night 6</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.lakehotel.is">Lake Hótel Egilsstaðir</a></div>
+            <p>A converted farmhouse on Lagarfljót with a genuinely excellent restaurant that grows its own wasabi. Hótel Hallormsstaður, in Iceland's largest forest, is the more scenic alternative.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot">
+              <div class="ph">Seyðisfjörður — the blue church at the end of the street</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Iceland%20Sey%C3%B0isfj%C3%B6r%C3%B0ur%20Church.JPG?width=1200" alt="Seyðisfjörður — the blue church at the end of the street" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Seyðisfjörður — the blue church at the end of the street · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Iceland%20Sey%C3%B0isfj%C3%B6r%C3%B0ur%20Church.JPG">Wikimedia Commons</a></figcaption>
+          </figure>
+          <figure>
+            <div class="shot">
+              <div class="ph">The Fjarðarheiði pass, descending into the fjord</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Sey%C3%B0isfjar%C3%B0arvegur.jpg?width=1200" alt="The Fjarðarheiði pass, descending into the fjord" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>The Fjarðarheiði pass, descending into the fjord · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Sey%C3%B0isfjar%C3%B0arvegur.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d7">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">07</div>
+        <div>
+          <h2 class="day-title">Stuðlagil, Dettifoss and the geothermal field</h2>
+          <div class="day-route">Egilsstaðir → Hengifoss → Stuðlagil → Möðrudalur → Dettifoss → Mývatn · 350 km · 4h30</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:23.68%;width:7.89%">Hengifoss</div><div class="block" style="left:34.21%;width:10.53%">Stuðlagil</div><div class="block drive" style="left:47.37%;width:5.26%">Möðrudalur</div><div class="block" style="left:57.89%;width:7.89%">Dettifoss</div><div class="block" style="left:71.05%;width:5.26%">Hverir</div><div class="block" style="left:81.58%;width:10.53%">Nature Baths</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>08:30–10:00</b> Hengifoss</div><div><b>10:30–12:30</b> Stuðlagil</div><div><b>13:00–14:00</b> Möðrudalur</div><div><b>15:00–16:30</b> Dettifoss</div><div><b>17:30–18:30</b> Hverir</div><div><b>19:30–21:30</b> Nature Baths</div></div>
+      <details class="legs"><summary>Driving · 350 km · 4h30 · optional cut available</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Egilsstaðir → Hengifoss → back</td><td class="num">70 km</td><td class="num">1h10</td></tr><tr><td>Egilsstaðir → Stuðlagil</td><td class="num">75 km</td><td class="num">1h</td></tr><tr><td>Stuðlagil → Möðrudalur</td><td class="num">60 km</td><td class="num">50 min</td></tr><tr><td>Möðrudalur → Dettifoss (west)</td><td class="num">85 km</td><td class="num">1h05</td></tr><tr><td>Dettifoss → Mývatn</td><td class="num">60 km</td><td class="num">50 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">350 km</td><td class="num">4h30</td></tr>
+    </tbody></table><p class="altnote">Drop Hengifoss: 280 km, 3h30</p></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Hengifoss&amp;query_place_id=ChIJq_X_MTiezkgR1XqP0jaGc0o">Hengifoss</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Stu%C3%B0lagil%20Canyon&amp;query_place_id=ChIJd7rLAfYpzEgR34_8axXpsF0">Stuðlagil Canyon</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=M%C3%B6%C3%B0rudalur&amp;query_place_id=ChIJU8UelUPKzUgRyek2Pw6Cqm8">Möðrudalur</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Dettifoss%20(west%20side)&amp;query_place_id=ChIJEYOF6YoGzUgRkGxDhsiRMqo">Dettifoss (west side)</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=N%C3%A1mafjall%20Hverir&amp;query_place_id=ChIJbeqt1QqfzUgR_PI0Y1ByDBA">Námafjall Hverir</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=M%C3%BDvatn%20Nature%20Baths&amp;query_place_id=ChIJhwNZHwGfzUgR7Y3AMkqZIxA">Mývatn Nature Baths</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Fossh%C3%B3tel%20M%C3%BDvatn%20Iceland&amp;query=65.644,-16.916">Fosshótel Mývatn</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Hengifoss<span class="t">1.5 hours, early start</span></h3><p>Iceland's third-highest waterfall, twenty minutes from the hotel on the west shore of Lagarfljót. A 2.5 km uphill walk, and the point of it is the cliff behind: alternating basalt layers striped with bands of red clay, each band a separate ancient eruption. Litlanesfoss on the way up is ringed by basalt columns.</p>
+          <h3>Stuðlagil canyon<span class="t">2 hours, including the walk</span></h3><p>A gorge in Jökuldalur where the river runs an improbable glacial teal between walls of vertical basalt columns — the densest concentration of columnar basalt in Iceland. It was only revealed around 2016, when a hydroelectric scheme upstream lowered the water and exposed the columns; before that nobody had seen it. Park on the west side at Stuðlafoss for the viewing platform in ten minutes rather than the 5 km each way from the east side.</p>
+          <h3>Möðrudalur<span class="t">30 minutes</span></h3><p>The highest farm in Iceland, on the Möðrudalsöræfi plateau — a high volcanic desert that looks like Mars. Stop for coffee and kleinur.</p>
+          <h3>Dettifoss<span class="t">1.5 hours</span></h3><p>Europe's most powerful waterfall by volume — 193 cubic metres a second falling forty-four metres into the Jökulsárgljúfur canyon. Take Road 862, the paved west bank; the east bank is rough gravel. Selfoss is a fifteen-minute walk upstream and is the more beautiful of the two.</p>
+          <h3>Námafjall Hverir<span class="t">1 hour</span></h3><p>A sulphurous field of boiling grey mud pots and roaring steam vents in ochre and rust-coloured earth, with no vegetation at all. Stay on the marked paths — the crust is thin and the mud is above eighty degrees.</p>
+          <h3>Mývatn Nature Baths<span class="t">2 hours, from 19:30</span></h3><p>Milky blue, far less crowded than the Blue Lagoon, looking out over the lake. Sunset here is the right way to end the day.</p>
+          <h3>Eating</h3><p>Vogafjós Farm Resort is the destination meal in the north — farm lamb and trout, their own dairy, and hverabrauð: dense rye bread slow-baked for twenty-four hours in the geothermal ground, served with smoked trout and butter. Daddi's Pizza in Reykjahlíð for the casual option.</p>
+          <div class="note"><p><strong>The longest day of the trip on paper — but it ends with two nights in one bed.</strong> If it runs long, drop Hengifoss rather than Stuðlagil: the canyon is the rarer sight and needs afternoon light on the columns. Ásbyrgi and Dimmuborgir have moved to tomorrow, which is what the extra night buys.</p></div>
+          <div class="hotel">
+            <div class="lbl">Night 7</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.islandshotel.is/hotels-in-iceland/fosshotel-myvatn">Fosshótel Mývatn</a></div>
+            <p>Modern, floor-to-ceiling lake views, the best-appointed hotel in the region — and we have it for two nights, so nobody packs a bag tomorrow. Vogafjós Farm Resort is the characterful alternative, with the area's best restaurant attached.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot solo">
+              <div class="ph">Dettifoss — 193 cubic metres a second</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Peter%20Heuveling%20Dettifoss%20Iceland.jpg?width=1200" alt="Dettifoss — 193 cubic metres a second" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Dettifoss — 193 cubic metres a second · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Peter%20Heuveling%20Dettifoss%20Iceland.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d8">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">08</div>
+        <div>
+          <h2 class="day-title">Whales, Ásbyrgi, and a day without packing</h2>
+          <div class="day-route">Mývatn → Húsavík → Ásbyrgi → Dimmuborgir → Mývatn · 190 km · 2h45</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:26.32%;width:18.42%">Whale watching</div><div class="block" style="left:50.00%;width:7.89%">Ásbyrgi</div><div class="block" style="left:65.79%;width:7.89%">Dimmuborgir</div><div class="block" style="left:76.32%;width:5.26%">Pseudo-craters</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>09:00–12:30</b> Whale watching</div><div><b>13:30–15:00</b> Ásbyrgi</div><div><b>16:30–18:00</b> Dimmuborgir</div><div><b>18:30–19:30</b> Pseudo-craters</div></div>
+      <details class="legs"><summary>Driving · 190 km · 2h45 · optional cut available</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Mývatn → Húsavík</td><td class="num">55 km</td><td class="num">45 min</td></tr><tr><td>Húsavík → Ásbyrgi</td><td class="num">65 km</td><td class="num">55 min</td></tr><tr><td>Ásbyrgi → Dimmuborgir</td><td class="num">62 km</td><td class="num">50 min</td></tr><tr><td>Dimmuborgir → pseudo-craters → hotel</td><td class="num">8 km</td><td class="num">15 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">190 km</td><td class="num">2h45</td></tr>
+    </tbody></table><p class="altnote">Plus 3.5 hours on the water</p></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=H%C3%BAsav%C3%ADk%20harbour&amp;query_place_id=ChIJyaLoTRVCzUgRESZcNE744Go">Húsavík harbour</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=%C3%81sbyrgi&amp;query_place_id=ChIJyd6WodwbzUgR69WO9Pm-nwU">Ásbyrgi</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Dimmuborgir&amp;query_place_id=ChIJ2U0EEiOfzUgRFiNiNp9NH4A">Dimmuborgir</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Sk%C3%BAtusta%C3%B0ag%C3%ADgar&amp;query_place_id=ChIJ-1FZYmKbzUgRc2ntWEz8k2o">Skútustaðagígar</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Húsavík whale watching<span class="t">3–3.5 hours, morning sailing</span></h3><p>Skjálfandi bay is the best whale watching in Europe: humpbacks reliably, minke, white-beaked dolphins, blue whales occasionally. Take a traditional oak schooner rather than a RIB — steadier, and much better with children. Morning sailings have the calmest water. Dress far warmer than the air temperature suggests. The wooden church of 1907 above the harbour is worth ten minutes afterwards.</p>
+          <h3>Ásbyrgi canyon<span class="t">1.5 hours</span></h3><p>A horseshoe canyon three and a half kilometres long with hundred-metre walls, forested at the closed end, formed by catastrophic glacial flooding. Norse tradition says it is a hoofprint left by Odin's horse — worth telling the children before you walk in. Drive to the inner car park and take the short path to the pond.</p>
+          <h3>Dimmuborgir<span class="t">1.5 hours</span></h3><p>A labyrinth of lava pillars, arches and hollow chambers east of the lake. A lava lake ran over marshy ground, the trapped steam punched hollow pillars up through it, and when the crust collapsed the pillars stayed standing. Folklore puts the home of the Yule Lads in here. Take the Kirkjan loop.</p>
+          <h3>Skútustaðagígar pseudo-craters<span class="t">1 hour</span></h3><p>Grass-covered crater cones on the south shore that were never volcanoes at all — they formed where lava ran over wet ground and the trapped steam blew through. A flat, easy loop full of birdlife, and the least demanding walk of the whole trip.</p>
+          <h3>Grjótagjá<span class="t">30 minutes, optional</span></h3><p>A small lava cave with a startlingly blue hot spring inside. Looking only — too hot to bathe, and on private land.</p>
+          <h3>Eating</h3><p>Lunch in Húsavík: Heimabakarí for baked goods, or fish and chips by the harbour. Back at Mývatn, whichever of Vogafjós or Daddi's Pizza you did not do last night.</p>
+          
+          <div class="hotel">
+            <div class="lbl">Night 8</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.islandshotel.is/hotels-in-iceland/fosshotel-myvatn">Fosshótel Mývatn — second night</a></div>
+            <p>The one day nobody moves rooms. After seven consecutive hotels that matters more than it sounds, and it is the single best thing the packaged tours do that our earlier plan did not.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot solo">
+              <div class="ph">Dimmuborgir — a collapsed lava tube, 2,300 years old</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Dimmuborgier%20Cathedral%20(14766437966).jpg?width=1200" alt="Dimmuborgir — a collapsed lava tube, 2,300 years old" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Dimmuborgir — a collapsed lava tube, 2,300 years old · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Dimmuborgier%20Cathedral%20(14766437966).jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d9">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">09</div>
+        <div>
+          <h2 class="day-title">Goðafoss, Akureyri and the Peninsula of the Trolls</h2>
+          <div class="day-route">Mývatn → Goðafoss → Akureyri → Siglufjörður → Hofsós → Sauðárkrókur · 315 km · 4h15</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:26.32%;width:5.26%">Goðafoss</div><div class="block" style="left:36.84%;width:13.16%">Akureyri</div><div class="block" style="left:55.26%;width:10.53%">Siglufjörður</div><div class="block" style="left:71.05%;width:7.89%">Hofsós pool</div><div class="block drive" style="left:81.58%;width:5.26%">Drive</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>09:00–10:00</b> Goðafoss</div><div><b>11:00–13:30</b> Akureyri</div><div><b>14:30–16:30</b> Siglufjörður</div><div><b>17:30–19:00</b> Hofsós pool</div><div><b>19:30–20:30</b> Drive</div></div>
+      <details class="legs"><summary>Driving · 315 km · 4h15</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Mývatn → Goðafoss</td><td class="num">50 km</td><td class="num">40 min</td></tr><tr><td>Goðafoss → Akureyri</td><td class="num">50 km</td><td class="num">40 min</td></tr><tr><td>Akureyri → Siglufjörður</td><td class="num">75 km</td><td class="num">1h05</td></tr><tr><td>Siglufjörður → Hofsós</td><td class="num">85 km</td><td class="num">1h05</td></tr><tr><td>Hofsós → Sauðárkrókur</td><td class="num">55 km</td><td class="num">45 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">315 km</td><td class="num">4h15</td></tr>
+    </tbody></table></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Go%C3%B0afoss&amp;query_place_id=ChIJnzYfSGp-zUgROx0NTqrNu34">Goðafoss</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Akureyri&amp;query_place_id=ChIJ6dYm-A6P0kgRIIlv_h0HSBk">Akureyri</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Herring%20Era%20Museum%2C%20Siglufj%C3%B6r%C3%B0ur&amp;query_place_id=ChIJQR9qiz3K0kgRFiH1W7xdwa0">Herring Era Museum, Siglufjörður</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Hofs%C3%B3s%20swimming%20pool&amp;query_place_id=ChIJvQ52z-zY0kgRba8qrsNnwsI">Hofsós swimming pool</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=H%C3%B3tel%20Tindast%C3%B3ll%2C%20Sau%C3%B0%C3%A1rkr%C3%B3kur&amp;query_place_id=ChIJFfQtTmIi00gRIgvmtX43Exk">Hótel Tindastóll, Sauðárkrókur</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Goðafoss<span class="t">1 hour</span></h3><p>The waterfall of the gods — a twelve-metre horseshoe where the lawspeaker Þorgeir threw his pagan idols after Iceland adopted Christianity in the year 1000. The west bank gives the classic wide view, the east the intimate one.</p>
+          <h3>Akureyri<span class="t">2.5 hours</span></h3><p>Nineteen thousand people at the head of a long fjord, with a compact walkable centre: the church, the botanical gardens — northernmost in the world and still in flower in August — and the red heart-shaped traffic lights. Lunch here, and Brynja for ice cream, made to the same recipe since 1939.</p>
+          <h3>Tröllaskagi, the Peninsula of the Trolls<span class="t">the afternoon</span></h3><p>The coast road north from Akureyri through Dalvík and Ólafsfjörður, tunnelling between fjords under mountains that fall straight into the sea. This is the stretch the packaged tours include and our earlier plan drove straight past — the single best thing we take from them.</p>
+          <h3>Siglufjörður and the Herring Era Museum<span class="t">1.5–2 hours</span></h3><p>Iceland's northernmost town, once the herring capital of the Atlantic and briefly one of the busiest ports in Europe. The museum spreads across three restored buildings and a boat: the salting stations, the machinery, and the quarters of the 'herring girls' who came north for the summer season. Far better than it sounds, and good with children.</p>
+          <h3>Hofsós swimming pool<span class="t">1 hour</span></h3><p>A geothermal pool cut into the cliff edge above Skagafjörður, built so the water appears to run straight off into the fjord. An infinity pool with a view of the open sea, for the price of a municipal swim.</p>
+          <h3>Eating</h3><p>Rub23 in Akureyri for sushi and rubbed fish, or Strikið for the fifth-floor fjord view. Hannes Boy on the Siglufjörður harbour. Dinner at Tindastóll's own restaurant in Sauðárkrókur.</p>
+          
+          <div class="hotel">
+            <div class="lbl">Night 9</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.arctichotels.is">Hótel Tindastóll, Sauðárkrókur</a></div>
+            <p>Built in 1884 and claimed as the oldest hotel in Iceland — timber, small, with a sauna and hot tub, and a restaurant that reviewers rate highly. The splurge alternative is now genuinely on the route rather than a detour: Deplar Farm sits in the Fljót valley between Siglufjörður and Skagafjörður.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot">
+              <div class="ph">Goðafoss — where the pagan idols went in</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Godafoss-18-Skjalfandafljot-2018-gje.jpg?width=1200" alt="Goðafoss — where the pagan idols went in" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Goðafoss — where the pagan idols went in · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Godafoss-18-Skjalfandafljot-2018-gje.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+          <figure>
+            <div class="shot">
+              <div class="ph">The basalt shelf below the falls</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Godafoss-20-Basalt-2018-gje.jpg?width=1200" alt="The basalt shelf below the falls" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>The basalt shelf below the falls · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Godafoss-20-Basalt-2018-gje.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d10">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">10</div>
+        <div>
+          <h2 class="day-title">Turf farms, a stone dragon, and Saga country</h2>
+          <div class="day-route">Sauðárkrókur → Glaumbær → Kolugljúfur → Hvítserkur → Eiríksstaðir → Stykkishólmur · 380 km · 4h30</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:26.32%;width:5.26%">Glaumbær</div><div class="block" style="left:36.84%;width:5.26%">Kolugljúfur</div><div class="block" style="left:44.74%;width:5.26%">Hvítserkur</div><div class="block" style="left:60.53%;width:5.26%">Eiríksstaðir</div><div class="block drive" style="left:68.42%;width:10.53%">Drive</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>09:00–10:00</b> Glaumbær</div><div><b>11:00–12:00</b> Kolugljúfur</div><div><b>12:30–13:30</b> Hvítserkur</div><div><b>15:30–16:30</b> Eiríksstaðir</div><div><b>17:00–19:00</b> Drive</div></div>
+      <details class="legs"><summary>Driving · 380 km · 4h30 · optional cut available</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Sauðárkrókur → Glaumbær</td><td class="num">12 km</td><td class="num">12 min</td></tr><tr><td>Glaumbær → Kolugljúfur</td><td class="num">85 km</td><td class="num">1h10</td></tr><tr><td>Kolugljúfur → Hvítserkur</td><td class="num">55 km</td><td class="num">50 min</td></tr><tr><td>Hvítserkur → Eiríksstaðir</td><td class="num">145 km</td><td class="num">1h40</td></tr><tr><td>Eiríksstaðir → Stykkishólmur</td><td class="num">85 km</td><td class="num">1h</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">380 km</td><td class="num">4h30</td></tr>
+    </tbody></table><p class="altnote">Drop Kolugljúfur and Eiríksstaðir: 300 km, 3h30</p></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Glaumb%C3%A6r%20Turf%20Farm&amp;query_place_id=ChIJNQJFKFwb00gRV22ZxLOQ43Y">Glaumbær Turf Farm</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Koluglj%C3%BAfur%20Canyon&amp;query_place_id=ChIJSV7Nt8F900gRLkWlCIWvklg">Kolugljúfur Canyon</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Hv%C3%ADtserkur&amp;query_place_id=ChIJw2W6pPRd00gR_OWkBoRneTY">Hvítserkur</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Eir%C3%ADkssta%C3%B0ir&amp;query_place_id=ChIJpUY4kHpY1EgRj75CZ5kH8PI">Eiríksstaðir</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Fosshotel%20Stykkish%C3%B3lmur&amp;query_place_id=ChIJA_s9JuUN1UgRuLi69uot5QI">Fosshotel Stykkishólmur</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Glaumbær turf farm<span class="t">1 hour</span></h3><p>An eighteenth-century turf-and-timber farmhouse complex, gable ends facing the field, interiors intact. The best-preserved example in Iceland and the clearest picture anyone will get of how Icelanders actually lived. The café serves cream cakes on period china.</p>
+          <h3>Kolugljúfur canyon<span class="t">1 hour</span></h3><p>A gorge in Víðidalur where the river drops through a series of falls, named for the giantess Kola who was said to live in it. Seven kilometres of gravel off the Ring Road, free parking, and almost nobody there. Both sides of the bridge give a view.</p>
+          <h3>Hvítserkur<span class="t">1 hour</span></h3><p>A fifteen-metre basalt sea stack shaped like a drinking dragon, standing offshore on the Vatnsnes peninsula. Best at low tide with wet sand reflecting it — check the tide table before committing. Seals haul out nearby.</p>
+          <h3>Eiríksstaðir<span class="t">1 hour</span></h3><p>A reconstructed Viking longhouse in Haukadalur, on the site where Erik the Red lived and where Leif Eriksson is believed to have been born — the family that reached Greenland and then North America five centuries before Columbus. A costumed guide tells the saga round the fire pit, and visitors consistently rate it one of the best cultural stops in the country. It sits on the road to Snæfellsnes rather than off it.</p>
+          <h3>Stykkishólmur<span class="t">evening</span></h3><p>A harbour town of brightly painted timber houses on a basalt bluff, looking out over Breiðafjörður and its two thousand islands. Climb Súgandisey, the little island reached by a causeway, for the view back over the roofs at sunset.</p>
+          <h3>Eating</h3><p>The Glaumbær café for cream cakes at eleven. Sjávarpakkhúsið on the Stykkishólmur harbour for dinner — mussels pulled from Breiðafjörður that morning, served in the pot. Narfeyrarstofa in a restored timber house is the more formal alternative.</p>
+          <div class="note"><p><strong>Now the longest driving day, and the one to trim if the weather turns.</strong> Kolugljúfur and Eiríksstaðir are the optional pair — dropping both brings the day to about 300 km and 3h30.</p></div>
+          <div class="hotel">
+            <div class="lbl">Night 10</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.islandshotel.is/hotels-in-iceland/fosshotel-stykkisholmur">Fosshotel Stykkishólmur</a></div>
+            <p>On the hill above the harbour with views over Breiðafjörður, and the practical choice for five — it has proper family rooms. Hótel Egilsen, a restored 1867 timber house on the waterfront, is the boutique alternative if you would rather have character than space.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot solo">
+              <div class="ph">Stykkishólmur — the harbour and Breiðafjörður beyond</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Stykkisholmur%2008.jpg?width=1200" alt="Stykkishólmur — the harbour and Breiðafjörður beyond" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Stykkishólmur — the harbour and Breiðafjörður beyond · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Stykkisholmur%2008.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d11">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">11</div>
+        <div>
+          <h2 class="day-title">Snæfellsnes, Iceland in miniature</h2>
+          <div class="day-route">Stykkishólmur → Kirkjufell → Snæfellsjökull → Djúpalónssandur → Arnarstapi → Búðir · 165 km · 2h30</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block" style="left:26.32%;width:7.89%">Kirkjufell</div><div class="block" style="left:39.47%;width:5.26%">Saxhóll</div><div class="block" style="left:47.37%;width:7.89%">Djúpalónssandur</div><div class="block" style="left:57.89%;width:5.26%">Lóndrangar</div><div class="block" style="left:65.79%;width:7.89%">Arnarstapi</div><div class="block" style="left:78.95%;width:7.89%">Búðakirkja</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>09:00–10:30</b> Kirkjufell</div><div><b>11:30–12:30</b> Saxhóll</div><div><b>13:00–14:30</b> Djúpalónssandur</div><div><b>15:00–16:00</b> Lóndrangar</div><div><b>16:30–18:00</b> Arnarstapi</div><div><b>19:00–20:30</b> Búðakirkja</div></div>
+      <details class="legs"><summary>Driving · 165 km · 2h30</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Stykkishólmur → Kirkjufell</td><td class="num">55 km</td><td class="num">45 min</td></tr><tr><td>Kirkjufell → Saxhóll</td><td class="num">45 km</td><td class="num">40 min</td></tr><tr><td>Saxhóll → Djúpalónssandur</td><td class="num">15 km</td><td class="num">15 min</td></tr><tr><td>Djúpalónssandur → Lóndrangar</td><td class="num">12 km</td><td class="num">12 min</td></tr><tr><td>Lóndrangar → Arnarstapi</td><td class="num">13 km</td><td class="num">12 min</td></tr><tr><td>Arnarstapi → Búðir</td><td class="num">25 km</td><td class="num">20 min</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">165 km</td><td class="num">2h30</td></tr>
+    </tbody></table></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Kirkjufell&amp;query_place_id=ChIJ2zHJmlV61UgRFL_TXRVu5PY">Kirkjufell</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Dj%C3%BApal%C3%B3nssandur&amp;query_place_id=ChIJ35IdKpCIKkkR29veil49-0M">Djúpalónssandur</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=L%C3%B3ndrangar&amp;query_place_id=ChIJr2DJE5WHKkkRKiuUjICGmXk">Lóndrangar</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Arnarstapi&amp;query_place_id=ChIJ09CGMcSAKkkRXZnXg2kup28">Arnarstapi</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=B%C3%BA%C3%B0akirkja&amp;query_place_id=ChIJv8Ug4gN_1UgRtUn7cmhYLgc">Búðakirkja</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=H%C3%B3tel%20B%C3%BA%C3%B0ir&amp;query_place_id=ChIJ60U6zgN_1UgRHz-eDvu2d-8">Hótel Búðir</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>The easiest day of the trip</h3><p>Ninety kilometres of peninsula holding a glacier, lava fields, black beaches, basalt cliffs and fishing villages. Short drives, long stops — and after ten days of moving hotel every morning, that is the point.</p>
+          <h3>Kirkjufell and Kirkjufellsfoss<span class="t">1.5 hours</span></h3><p>A 463-metre nunatak — a peak that stood above the ice sheet while the glaciers ground away the land around it — and the most photographed mountain in Iceland. The classic composition puts the small waterfall in the foreground with the mountain behind, two minutes from the paid car park. Morning light works from the waterfall side. Climbing it is no longer permitted.</p>
+          <h3>Saxhóll crater<span class="t">45 minutes</span></h3><p>A scoria cone with a metal staircase to the rim, responsible for some of the lava the peninsula's west end sits on. Five minutes up, and the view over Snæfellsjökull and the coast is out of all proportion to the effort.</p>
+          <h3>Djúpalónssandur and Dritvík<span class="t">1.5 hours</span></h3><p>A black pebble beach reached through a lava field, with the rusted ribs of the English trawler Epine still scattered across the sand where it wrecked in 1948. Fourteen crew died and the wreckage is left as a memorial, so it stays where it lies. Four lifting stones sit above the beach, which fishermen once used to test whether a man was strong enough for a boat crew — the children will try them.</p>
+          <h3>Lóndrangar<span class="t">1 hour</span></h3><p>Two basalt plugs standing straight out of the sea, the remains of a crater the ocean has eaten away, with fulmars, kittiwakes and guillemots on the ledges. Viewing platforms five minutes from the road.</p>
+          <h3>Arnarstapi and Hellnar<span class="t">1.5 hours</span></h3><p>Basalt arches and stacks full of nesting birds, and a coastal path between the two villages. Above it sits Snæfellsjökull, the glacier-capped volcano Jules Verne used as the entrance to the centre of the earth.</p>
+          <h3>Búðakirkja<span class="t">evening</span></h3><p>A small black timber church standing alone on a lava field by the sea, with a graveyard dating to 1705. It is a two-minute walk from tonight's hotel, which means we can wait for the light rather than photograph it at noon with a coach party.</p>
+          <h3>Eating</h3><p>Bjargarsteinn in Grundarfjörður for lunch, looking straight across at Kirkjufell. Dinner at Hótel Búðir, which is half the reason to stay there — book the table with the room.</p>
+          
+          <div class="hotel">
+            <div class="lbl">Night 11</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.hotelbudir.is">Hótel Búðir</a></div>
+            <p>Alone on the lava field at the peninsula's southern edge, beside the black church, looking across the bay to the glacier. One of the most romantic hotels in Iceland, with a restaurant worth planning the evening around — and the best-placed base for tomorrow's easy run into the city.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot">
+              <div class="ph">Kirkjufell — the most photographed mountain in Iceland</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mt.%20Kirkjufell%2C%20Grundarfj%C3%B6r%C3%B0ur%2C%20Iceland%20(51636864605).jpg?width=1200" alt="Kirkjufell — the most photographed mountain in Iceland" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Kirkjufell — the most photographed mountain in Iceland · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Mt.%20Kirkjufell%2C%20Grundarfj%C3%B6r%C3%B0ur%2C%20Iceland%20(51636864605).jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+          <figure>
+            <div class="shot">
+              <div class="ph">The classic composition, waterfall in the foreground</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Mt.%20Kirkjufell%2C%20Grundarfj%C3%B6r%C3%B0ur%2C%20Iceland%20(53154146167).jpg?width=1200" alt="The classic composition, waterfall in the foreground" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>The classic composition, waterfall in the foreground · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Mt.%20Kirkjufell%2C%20Grundarfj%C3%B6r%C3%B0ur%2C%20Iceland%20(53154146167).jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="day reveal" id="d12">
+    <div class="wrap">
+      <div class="day-head">
+        <div class="day-num">12</div>
+        <div>
+          <h2 class="day-title">Hraunfossar, and into Reykjavík</h2>
+          <div class="day-route">Búðir → Borgarnes → Deildartunguhver → Hraunfossar → Reykjavík · 265 km · 3h15</div>
+        </div>
+      </div>
+      <div class="ribbon"><div class="seg twilight" style="left:0;width:0.26%"></div><div class="seg day" style="left:6.58%;width:86.05%"></div><div class="seg golden" style="left:6.58%;width:7.37%"></div><div class="seg golden" style="left:85.26%;width:7.37%"></div><div class="seg twilight" style="left:92.63%;right:0"></div><div class="block drive" style="left:28.95%;width:10.53%">Drive east</div><div class="block" style="left:42.11%;width:5.26%">Deildartunguhver</div><div class="block" style="left:50.00%;width:7.89%">Hraunfossar</div><div class="block" style="left:65.79%;width:10.53%">Sky Lagoon</div><div class="block" style="left:81.58%;width:10.53%">Reykjavík</div></div><div class="ribbon-scale"><span>04:00</span><span>08:00</span><span>12:00</span><span>16:00</span><span>20:00</span><span>23:00</span></div>
+      <div class="mobile-sched"><div><b>09:30–11:30</b> Drive east</div><div><b>12:00–13:00</b> Deildartunguhver</div><div><b>13:30–15:00</b> Hraunfossar</div><div><b>16:30–18:30</b> Sky Lagoon</div><div><b>19:30–21:30</b> Reykjavík</div></div>
+      <details class="legs"><summary>Driving · 265 km · 3h15 · optional cut available</summary>
+    <table class="legtable"><tbody>
+    <tr><td>Búðir → Borgarnes</td><td class="num">110 km</td><td class="num">1h20</td></tr><tr><td>Borgarnes → Deildartunguhver</td><td class="num">40 km</td><td class="num">30 min</td></tr><tr><td>Deildartunguhver → Hraunfossar</td><td class="num">20 km</td><td class="num">20 min</td></tr><tr><td>Hraunfossar → Reykjavík</td><td class="num">145 km</td><td class="num">1h50</td></tr>
+    <tr class="tot"><td>Total</td><td class="num">265 km</td><td class="num">3h15</td></tr>
+    </tbody></table><p class="altnote">Drop Hraunfossar: 185 km, 2h20</p></details>
+      <div class="chips"><span class="chiplbl">Photos &amp; directions</span><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=Hraunfossar&amp;query_place_id=ChIJz5PmX-I-1EgRyUQk3iKCpOQ">Hraunfossar</a><a target="_blank" rel="noopener" href="https://www.google.com/maps/search/?api=1&amp;query=The%20Reykjav%C3%ADk%20EDITION%20Iceland&amp;query=64.1497,-21.9408">The Reykjavík EDITION</a></div>
+      <div class="grid" style="margin-top:2rem">
+        <div>
+          <h3>Deildartunguhver<span class="t">30 minutes</span></h3><p>Europe's highest-flow hot spring, discharging 180 litres a second at ninety-seven degrees — it heats the towns for sixty kilometres around. Steam everywhere, and a farm shop selling tomatoes grown on it.</p>
+          <h3>Hraunfossar and Barnafoss<span class="t">1.5 hours</span></h3><p>Meltwater seeps out of a lava field in a kilometre-wide curtain of small falls into a turquoise river — not one waterfall but a thousand, emerging from under the rock along the whole bank. Barnafoss is a short walk upstream, narrower and violent. Late-afternoon side-light here is one of the most underrated shots in the country.</p>
+          <h3>Sky Lagoon, Kópavogur<span class="t">2 hours, optional</span></h3><p>An infinity-edge geothermal lagoon on the ocean edge with a seven-step ritual — better designed than the Blue Lagoon and ten minutes from the city.</p>
+          <h3>Reykjavík<span class="t">evening</span></h3><p>Hallgrímskirkja at the top of the Rainbow Street, the Sun Voyager on the shore, Harpa on the harbour. Whatever is left of the trip, spend it walking.</p>
+          <h3>Eating</h3><p><strong>Dill</strong> — Iceland's Michelin-starred restaurant, New Nordic tasting menu, booked a month ahead. Sæta Svínið is easier with children, and Bæjarins Beztu for the hot dog, a genuine national institution at about four euros.</p>
+          
+          <div class="hotel">
+            <div class="lbl">Night 12</div>
+            <div class="name"><a target="_blank" rel="noopener" href="https://www.editionhotels.com/reykjavik/">The Reykjavík EDITION</a></div>
+            <p>Iceland's only five-star, on the Old Harbour, with a Michelin-recommended restaurant and a rooftop bar. Sandhotel on Laugavegur is the excellent, less expensive alternative in a former bakery — and easier for a family.</p>
+          </div>
+        </div>
+        <div class="stack">
+          <figure>
+            <div class="shot">
+              <div class="ph">Hraunfossar — a kilometre of water straight out of lava</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Hraunfossar%2C%20Iceland%2C%2020240715%200846%200765.jpg?width=1200" alt="Hraunfossar — a kilometre of water straight out of lava" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>Hraunfossar — a kilometre of water straight out of lava · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Hraunfossar%2C%20Iceland%2C%2020240715%200846%200765.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+          <figure>
+            <div class="shot">
+              <div class="ph">The turquoise Hvítá below the falls</div>
+              <img src="https://commons.wikimedia.org/wiki/Special:FilePath/Iceland%20Hraunfossar%201.jpg?width=1200" alt="The turquoise Hvítá below the falls" loading="lazy" decoding="async" onerror="this.style.display='none'">
+            </div>
+            <figcaption>The turquoise Hvítá below the falls · <a target="_blank" rel="noopener" href="https://commons.wikimedia.org/wiki/File:Iceland%20Hraunfossar%201.jpg">Wikimedia Commons</a></figcaption>
+          </figure>
+        </div>
+      </div>
+    </div>
+  </section>
+
+<section id="driving">
+  <div class="wrap">
+    <div class="kicker">Every leg, measured</div>
+    <h2>The driving</h2>
+    <p class="lede">Approximate road distances and moving time, before stops. Real elapsed time runs roughly a third longer once you factor in fuel, photographs and lunch.</p>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Day</th><th>Route</th><th>Distance</th><th>Driving</th></tr></thead>
+      <tbody>
+        <tr><td class="num">1</td><td>Arrival and the Golden Circle</td><td class="num">200 km</td><td class="num">2h50</td></tr>
+        <tr><td class="num">2</td><td>Kerið, hot springs and the first waterfall</td><td class="num">170 km</td><td class="num">2h20</td></tr>
+        <tr><td class="num">3</td><td>Skógafoss, a glacier walk, black beaches</td><td class="num">120 km</td><td class="num">1h50</td></tr>
+        <tr><td class="num">4</td><td>Canyons, lava fields, into glacier country</td><td class="num">185 km</td><td class="num">2h20</td></tr>
+        <tr><td class="num">5</td><td>Jökulsárlón at sunrise, Vestrahorn at sunset</td><td class="num">155 km</td><td class="num">2h15</td></tr>
+        <tr><td class="num">6</td><td>The East Fjords</td><td class="num">315 km</td><td class="num">4h15</td></tr>
+        <tr><td class="num">7</td><td>Stuðlagil, Dettifoss and the geothermal field</td><td class="num">350 km</td><td class="num">4h30</td></tr>
+        <tr><td class="num">8</td><td>Whales, Ásbyrgi, and a day without packing</td><td class="num">190 km</td><td class="num">2h45</td></tr>
+        <tr><td class="num">9</td><td>Goðafoss, Akureyri and the Peninsula of the Trolls</td><td class="num">315 km</td><td class="num">4h15</td></tr>
+        <tr><td class="num">10</td><td>Turf farms, a stone dragon, and Saga country</td><td class="num">380 km</td><td class="num">4h30</td></tr>
+        <tr><td class="num">11</td><td>Snæfellsnes, Iceland in miniature</td><td class="num">165 km</td><td class="num">2h30</td></tr>
+        <tr><td class="num">12</td><td>Hraunfossar, and into Reykjavík</td><td class="num">265 km</td><td class="num">3h15</td></tr>
+      </tbody>
+      <tfoot><tr><td colspan="2">Total</td><td class="num">2,810 km</td><td class="num">~37h30</td></tr></tfoot>
+    </table>
+    </div>
+    <div class="note">
+      <p><strong>This is the version that survives contact with five people and thirteen days.</strong> The longest day is now 380 km against 445, and days 7 and 10 both carry optional stops that can be dropped on the morning if the weather turns &mdash; Hengifoss takes day 7 to 280 km, and cutting Kolugljúfur with Eiríksstaðir takes day 10 to 300. Two consecutive nights at Mývatn mean one morning where nobody packs.</p>
+    </div>
+    <p>For comparison, a commercial operator selling this same circuit over the same ground caps its longest day at 350 km. We are within thirty kilometres of that, with more stops.</p>
+  </div>
+</section>
+
+<section id="booking">
+  <div class="wrap">
+    <div class="kicker">Everything in one place</div>
+    <h2>Booking</h2>
+    <p class="lede">August is peak season and the constraint is supply, not price. Book in this order: <strong>Fosshotel Glacier Lagoon</strong> first — fewest beds, highest demand on the whole route. Then <strong>Hótel Kría in Vík</strong>, because Vík is the only town for 110 km either way. Then Torfhús and Rangá, both small. Then everything else.</p>
+    <p>Book hotels direct on the property website rather than through a platform. Icelandic hotels routinely match or beat the booking sites and give better cancellation terms.</p>
+
+    <h3>Where we sleep</h3>
+    <div class="linkgrid"><a target="_blank" rel="noopener" href="https://www.torfhus.is">Torfhús Retreat<span>night 1 · torfhus.is</span></a><a target="_blank" rel="noopener" href="https://www.hotelranga.is">Hotel Rangá<span>night 2 · hotelranga.is</span></a><a target="_blank" rel="noopener" href="https://www.hotelkria.is">Hótel Kría, Vík<span>night 3 · hotelkria.is</span></a><a target="_blank" rel="noopener" href="https://www.islandshotel.is/hotels-in-iceland/fosshotel-glacier-lagoon">Fosshotel Glacier Lagoon<span>night 4 · islandshotel.is</span></a><a target="_blank" rel="noopener" href="https://www.hotelhofn.is">Hótel Höfn<span>night 5 · hotelhofn.is</span></a><a target="_blank" rel="noopener" href="https://www.lakehotel.is">Lake Hótel Egilsstaðir<span>night 6 · lakehotel.is</span></a><a target="_blank" rel="noopener" href="https://www.islandshotel.is/hotels-in-iceland/fosshotel-myvatn">Fosshótel Mývatn<span>nights 7–8 · islandshotel.is</span></a><a target="_blank" rel="noopener" href="https://www.arctichotels.is">Hótel Tindastóll, Sauðárkrókur<span>night 9 · arctichotels.is</span></a><a target="_blank" rel="noopener" href="https://www.islandshotel.is/hotels-in-iceland/fosshotel-stykkisholmur">Fosshotel Stykkishólmur<span>night 10 · islandshotel.is</span></a><a target="_blank" rel="noopener" href="https://www.hotelbudir.is">Hótel Búðir<span>night 11 · hotelbudir.is</span></a><a target="_blank" rel="noopener" href="https://www.editionhotels.com/reykjavik/">The Reykjavík EDITION<span>night 12 · editionhotels.com</span></a><a target="_blank" rel="noopener" href="https://www.elevenexperience.com/deplar-farm">Deplar Farm<span>the splurge, night 9 · elevenexperience.com</span></a></div>
+
+    <h3>What we book ahead</h3>
+    <div class="linkgrid"><a target="_blank" rel="noopener" href="https://fridheimar.is">Friðheimar greenhouse lunch<span>day 1 · fridheimar.is</span></a><a target="_blank" rel="noopener" href="https://secretlagoon.is">Secret Lagoon<span>day 2 · secretlagoon.is</span></a><a target="_blank" rel="noopener" href="https://megazipline.is">Mega Zipline, Hveragerði<span>day 2, optional · megazipline.is</span></a><a target="_blank" rel="noopener" href="https://adventures.is">Glacier walk — Arctic Adventures<span>day 3 · adventures.is</span></a><a target="_blank" rel="noopener" href="https://www.mountainguides.is">Glacier walk — Mountain Guides<span>day 3 · mountainguides.is</span></a><a target="_blank" rel="noopener" href="https://www.zipline.is">Zipline Iceland, Vík<span>day 3, optional · zipline.is</span></a><a target="_blank" rel="noopener" href="https://icelagoon.is">Jökulsárlón zodiac<span>day 5 · icelagoon.is</span></a><a target="_blank" rel="noopener" href="https://www.pakkhus.is">Pakkhús, Höfn<span>day 5 · pakkhus.is</span></a><a target="_blank" rel="noopener" href="https://www.vokbaths.is">Vök Baths<span>day 6 · vokbaths.is</span></a><a target="_blank" rel="noopener" href="https://myvatnnaturebaths.is">Mývatn Nature Baths<span>day 7 · myvatnnaturebaths.is</span></a><a target="_blank" rel="noopener" href="https://www.northsailing.is">Whales — North Sailing<span>day 8 · northsailing.is</span></a><a target="_blank" rel="noopener" href="https://www.gentlegiants.is">Whales — Gentle Giants<span>day 8 · gentlegiants.is</span></a><a target="_blank" rel="noopener" href="https://www.sild.is">Herring Era Museum<span>day 9 · sild.is</span></a><a target="_blank" rel="noopener" href="https://www.eiriksstadir.is">Eiríksstaðir<span>day 10 · eiriksstadir.is</span></a><a target="_blank" rel="noopener" href="https://www.skylagoon.com">Sky Lagoon<span>day 12 · skylagoon.com</span></a><a target="_blank" rel="noopener" href="https://dillrestaurant.is">Dill, Reykjavík<span>day 12 · dillrestaurant.is</span></a></div>
+
+    <h3>Check every morning</h3>
+    <div class="linkgrid"><a target="_blank" rel="noopener" href="https://www.road.is">Road conditions<span>road.is</span></a><a target="_blank" rel="noopener" href="https://en.vedur.is">Weather and wind<span>en.vedur.is</span></a><a target="_blank" rel="noopener" href="https://safetravel.is">Safety alerts<span>safetravel.is</span></a></div>
+
+    <h3>The car</h3>
+    <p>Five people with luggage means a seven-seater or a large SUV, automatic, booked well ahead — the big vehicles go first in August. A 2WD is technically enough for this route since we use no F-roads.</p>
+    <div class="note">
+      <p><strong>Take gravel protection and sand-and-ash protection.</strong> Neither is included as standard. The second covers a real risk on the south coast, where ash storms can strip the paint off a car in minutes and the bill runs into thousands. And wind is the real hazard in Iceland, not ice — never open a car door into a gust. It will take the door off, and no policy covers it.</p>
+    </div>
+  </div>
+</section>
+
+<section id="budget">
+  <div class="wrap">
+    <div class="kicker">Two adults, three children, ten nights</div>
+    <h2>What it costs</h2>
+
+    <div class="note">
+      <p><strong>One structural point first.</strong> Almost no Icelandic hotel has a room that sleeps five. The standard is a double or a twin, occasionally a family room for four. For five of us that means <em>two rooms a night at nearly every stop</em> — and that single fact is the largest line in the budget. It roughly doubles the accommodation cost against the same trip for a couple.</p>
+    </div>
+
+    <p>Two ways to soften it: ask each property directly for a family room, suite or connecting rooms when booking, or substitute apartments and cottages at five of the stops. Both versions are below, and nothing about the route, the sites or the timing changes between them.</p>
+
+    <h3>As planned, premium hotels</h3>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>Line</th><th>Basis</th><th>Low</th><th>High</th></tr></thead>
+      <tbody>
+        <tr><td>Flights, Athens–Keflavík</td><td>5 × €450–750 return, one stop</td><td class="num">€2,250</td><td class="num">€3,750</td></tr>
+        <tr><td>Accommodation</td><td>12 nights × 2 rooms, premium tier</td><td class="num">€10,800</td><td class="num">€16,800</td></tr>
+        <tr><td>Car hire</td><td>7-seater, 13 days, full cover</td><td class="num">€2,300</td><td class="num">€3,000</td></tr>
+        <tr><td>Fuel</td><td>~2,810 km</td><td class="num">€560</td><td class="num">€680</td></tr>
+        <tr><td>Lunches</td><td>5 × €20–28 × 12 days</td><td class="num">€1,200</td><td class="num">€1,680</td></tr>
+        <tr><td>Dinners</td><td>5 × €45–70 × 12 days</td><td class="num">€2,700</td><td class="num">€4,200</td></tr>
+        <tr><td>Coffee, snacks, supermarket</td><td></td><td class="num">€330</td><td class="num">€540</td></tr>
+        <tr><td>Glacier walk</td><td>5 × €95–120</td><td class="num">€475</td><td class="num">€600</td></tr>
+        <tr><td>Jökulsárlón zodiac</td><td>5 × €85–105</td><td class="num">€425</td><td class="num">€525</td></tr>
+        <tr><td>Whale watching</td><td>5 × €80–110, children reduced</td><td class="num">€400</td><td class="num">€550</td></tr>
+        <tr><td>Geothermal baths ×4</td><td>Secret Lagoon, Vök, Mývatn, Hofsós</td><td class="num">€700</td><td class="num">€1,000</td></tr>
+        <tr><td>Entry, parking, museums</td><td>Kerið, Stokksnes, Stuðlagil, Herring Era, Eiríksstaðir</td><td class="num">€260</td><td class="num">€380</td></tr>
+        <tr><td>Contingency</td><td>weather, an extra meal out, souvenirs</td><td class="num">€1,050</td><td class="num">€1,600</td></tr>
+      </tbody>
+      <tfoot>
+        <tr><td colspan="2">Excluding flights</td><td class="num">€21,200</td><td class="num">€31,550</td></tr>
+        <tr><td colspan="2">Including flights</td><td class="num">€23,450</td><td class="num">€35,300</td></tr>
+        <tr><td colspan="2">Per person, all in</td><td class="num">€4,690</td><td class="num">€7,060</td></tr>
+      </tfoot>
+    </table>
+    </div>
+
+    <h3>Same route, five hotels swapped</h3>
+    <ul class="clean">
+      <li><strong>Night 1:</strong> a Golden Circle cottage or Hotel Grímsborgir family suite instead of Torfhús — about €500</li>
+      <li><strong>Night 3:</strong> a Vík apartment instead of two rooms at Kría — about €200</li>
+      <li><strong>Night 5:</strong> Hótel Smyrlabjörg or a Höfn apartment — about €150</li>
+      <li><strong>Night 11:</strong> a Snæfellsnes cottage instead of Hótel Búðir — about €350</li>
+      <li><strong>Night 12:</strong> Sandhotel or a central Reykjavík apartment instead of the EDITION — about €500</li>
+      <li><strong>Lunches:</strong> four supermarket picnics instead of restaurant lunches — about €550</li>
+    </ul>
+    <div class="table-scroll">
+    <table>
+      <thead><tr><th>&nbsp;</th><th>Low</th><th>High</th></tr></thead>
+      <tbody>
+        <tr><td>Excluding flights</td><td class="num">€16,700</td><td class="num">€24,550</td></tr>
+        <tr><td>Including flights</td><td class="num">€18,950</td><td class="num">€28,300</td></tr>
+        <tr><td>Per person, all in</td><td class="num">€3,790</td><td class="num">€5,660</td></tr>
+      </tbody>
+    </table>
+    </div>
+
+    <h3>Where the money actually goes</h3>
+    <ul class="clean">
+      <li><strong>Accommodation is roughly half the total</strong> and the only line with real leverage. Everything else is close to fixed.</li>
+      <li><strong>Booking early beats every other saving.</strong> August rooms priced in February versus June differ by thirty to forty per cent, and the good ones are gone by late spring.</li>
+      <li><strong>Children's pricing is inconsistent.</strong> Whale watching and the lagoons discount children heavily; glacier walks and zodiac tours often charge full price and impose minimum ages. Check ages when booking each one.</li>
+      <li><strong>Alcohol is punitive</strong> — €60–90 for a bottle of wine with dinner. Buy at the duty-free shop in the arrivals hall at Keflavík before leaving the airport, as everyone in Iceland does.</li>
+      <li><strong>The eleventh and twelfth nights cost roughly €3,100–4,700 all in.</strong> They buy Tröllaskagi and the Herring Era Museum, a rest day at Mývatn with Ásbyrgi and Dimmuborgir, Saga country in the Dalir, and — the real point — a longest day of 380 km instead of 445.</li>
+    </ul>
+  </div>
+</section>
+
+<section id="practical">
+  <div class="wrap">
+    <div class="kicker">Before we go</div>
+    <h2>Worth knowing</h2>
+    <ul class="clean">
+      <li><strong>Twelve nights, thirteen calendar days.</strong> Day 12 ends in Reykjavík and we fly home on day 13.</li>
+      <li><strong>The shape is right now.</strong> No day exceeds 380 km, against 445 in the ten-night version, and there are two consecutive nights at Mývatn. A commercial operator running this same route caps its longest day at 350 km — we are close, and both remaining long days have optional stops that can be dropped on the morning.</li>
+      <li><strong>Days 7 and 10 are the pinch points.</strong> Drop Hengifoss on day 7 (350 → 280 km) and Kolugljúfur with Eiríksstaðir on day 10 (380 → 300 km) if weather or fatigue argues for it. Nothing else needs to move.</li>
+      <li><strong>Puffins leave in mid to late August.</strong> If they matter to the children, travel in the first fortnight — Dyrhólaey on day 3 and Lóndrangar on day 11 are the best chances.</li>
+      <li><strong>Northern lights become possible from about 20 August,</strong> when the nights get properly dark again. A bonus, not a plan.</li>
+      <li><strong>Reykjanes, where we land, is an active volcanic zone.</strong> The last eruption ran 16 July to 5 August 2025 and another is considered likely; none have affected flights, and the Blue Lagoon closes and reopens as a precaution. Check safetravel.is the week we travel.</li>
+      <li><strong>Pack for four seasons in one day</strong> — waterproof shell and trousers, fleece, hat and gloves, proper boots, swimwear permanently at the top of the bag, and eye masks for the children.</li>
+      <li><strong>Tap water is among the best in the world.</strong> Refillable bottles, never buy bottled. The hot water smells faintly of sulphur; harmless.</li>
+      <li><strong>Everything takes cards,</strong> including public toilets and remote petrol pumps. No cash needed anywhere on this route.</li>
+    </ul>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <p style="max-width:60ch;margin:0 0 .8rem">Photographs are from Wikimedia Commons and are the work of their individual contributors; each caption links through to the source page and its licence. Opened without an internet connection, the photographs are replaced by plain panels and everything else still reads.</p>
+    <p class="mono" style="margin:0;color:rgba(237,241,242,.4)">Iceland · Ring Road and Snæfellsnes · Ten days in August</p>
+  </div>
+</footer>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script>
+document.documentElement.classList.add('js');
+
+/* Smooth-scroll the in-page nav. Plain #anchors already work without this —
+   it exists so sandboxed preview frames don't treat them as external links. */
+document.addEventListener('click', e => {
+  const a = e.target.closest('a[href^="#"]');
+  if (!a) return;
+  const el = document.getElementById(a.getAttribute('href').slice(1));
+  if (!el) return;
+  e.preventDefault();
+  const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  window.scrollTo({ top: el.getBoundingClientRect().top + window.scrollY - 52,
+                    behavior: reduce ? 'auto' : 'smooth' });
+});
+
+if ('IntersectionObserver' in window) {
+  const io = new IntersectionObserver(entries => {
+    entries.forEach(en => {
+      if (!en.isIntersecting) return;
+      en.target.classList.add('in');
+      io.unobserve(en.target);
+    });
+  }, { rootMargin: '250px' });
+  document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+} else {
+  document.querySelectorAll('.reveal').forEach(el => el.classList.add('in'));
+}
+
+/* ── The map. Leaflet + OpenStreetMap, both plain <script>/<img> loads,
+      so this works from a local file in any browser. ── */
+const PLACES = [[0,"Keflavík Airport",63.985,-22.6056,"Land, collect the car, drive straight past Reykjavík"],[1,"Þingvellir National Park",64.2822,-21.0764,"Almannagjá gorge down to Öxarárfoss","ChIJe2kT-x-B1kgR8mKSB4tsdWs"],[1,"Friðheimar",64.1781,-20.4471,"Lunch in the tomato greenhouse — book ahead","ChIJbYLfYPmW1kgRTV6VqpYHPN4"],[1,"Geysir",64.3138,-20.2995,"Strokkur every 6–10 min","ChIJH9zZM-yj1kgR5Xfp_dooi9o"],[1,"Gullfoss",64.3271,-20.1199,"Upper path for the rainbow","ChIJybZFr3Sl1kgRARZBC9tHYyw"],[1,"Torfhús Retreat",64.2488,-20.3032,"Night 1","ChIJde8kvJW91kgRtmedHsjiPfc"],[2,"Kerið Crater",64.0413,-20.8851,"Red scoria, aquamarine lake","ChIJV_L2VbeL1kgRB9kuweBEWlE"],[2,"Secret Lagoon, Flúðir",64.1374,-20.3097,"Iceland's oldest pool, 1891","ChIJAzrP-_OV1kgRqbTTIAgihLo"],[2,"Seljalandsfoss",63.6156,-19.9886,"Be behind it at 20:00","ChIJFSTv6K0e10gRjRcJUiDmAa4"],[2,"Hotel Rangá",63.7803,-20.3011,"Night 2","ChIJc06uU5fk1kgR_NgCxEZIBDs"],[3,"Skógafoss",63.5321,-19.5114,"Late-morning rainbow","ChIJFYylOXY710gRSHn-zR_HYA8"],[3,"Sólheimajökull",63.5708,-19.2924,"Guided glacier walk, midday","ChIJSXrZaFcw10gRNvldSdyBK1s"],[3,"Dyrhólaey",63.4015,-19.1284,"Sea arch and puffins","ChIJk9IcF7JJ10gR6yJHDvMw6P0"],[3,"Reynisfjara",63.4033,-19.0448,"Sneaker waves — never turn your back"],[3,"Hótel Kría, Vík",63.4181,-18.9936,"Night 3","ChIJzWdYRE9K10gRQjt8rYQbomY"],[4,"Fjaðrárgljúfur",63.7713,-18.1718,"Midday site — needs high sun","ChIJ3ZFCWfDl0EgRvbVlccHsIKQ"],[4,"Kirkjubæjarklaustur",63.791,-18.06,"Fuel and lunch"],[4,"Svartifoss, Skaftafell",64.0275,-16.9753,"1.5 km uphill, black basalt columns","ChIJV6KJ4M810EgR11NlQqEPJ-M"],[4,"Fosshotel Glacier Lagoon",63.9906,-16.701,"Night 4 — book this one first"],[5,"Jökulsárlón",64.0784,-16.2306,"05:30. The alarm that justifies itself","ChIJGTg61-zWz0gRqUYB4VnJBc0"],[5,"Diamond Beach",64.0411,-16.1967,"Falling tide leaves the most ice","ChIJocOAuPPXz0gR_01cgn2X9j0"],[5,"Fjallsárlón",64.0158,-16.3657,"Quieter, glacier much closer","ChIJqQd7WFko0EgRLNqgFLyMiIg"],[5,"Stokksnes / Vestrahorn",64.2549,-14.9933,"From 19:30. Pay at the Viking Café","ChIJ8xBJ5xSqz0gReCRozzI48i0"],[5,"Hótel Höfn",64.2575,-15.2126,"Night 5","ChIJz0YrB1isz0gRV6HnWEMUBQI"],[6,"Djúpivogur",64.6618,-14.2948,"The 34 stone eggs","ChIJfSM0kYvDzkgRUFSQwxsZDT0"],[6,"Petra's Stone Collection",64.8354,-13.8806,"A lifetime of minerals","ChIJt_HbQGe1zkgRE3ogPnD35sw"],[6,"Seyðisfjörður",65.2612,-14.0105,"Over the Fjarðarheiði pass","ChIJzYTuf_3-y0gRWWIMJVyCbIM"],[6,"Vök Baths",65.3031,-14.447,"Floating pools, at sunset","ChIJEVOgoWkFzEgRyiNsXk2lzvg"],[6,"Lake Hótel Egilsstaðir",65.2622,-14.415,"Night 6","ChIJ7yM9Y4IEzEgRvuPGSnX-H6o"],[7,"Hengifoss",65.0951,-14.8892,"Red clay bands — the optional cut","ChIJq_X_MTiezkgR1XqP0jaGc0o"],[7,"Stuðlagil Canyon",65.1633,-15.3069,"West side with children — 10 min, not 5 km","ChIJd7rLAfYpzEgR34_8axXpsF0"],[7,"Möðrudalur",65.3741,-15.8833,"Highest farm in Iceland","ChIJU8UelUPKzUgRyek2Pw6Cqm8"],[7,"Dettifoss (west side)",65.8161,-16.3873,"Road 862, paved","ChIJEYOF6YoGzUgRkGxDhsiRMqo"],[7,"Námafjall Hverir",65.6409,-16.8093,"Stay on the paths","ChIJbeqt1QqfzUgR_PI0Y1ByDBA"],[7,"Mývatn Nature Baths",65.6309,-16.8476,"Sunset soak","ChIJhwNZHwGfzUgR7Y3AMkqZIxA"],[7,"Fosshótel Mývatn",65.644,-16.916,"Nights 7 and 8"],[8,"Húsavík harbour",66.0463,-17.3437,"Morning sailing, oak schooner","ChIJyaLoTRVCzUgRESZcNE744Go"],[8,"Ásbyrgi",66.0178,-16.5055,"Odin's hoofprint. Drive to the inner car park","ChIJyd6WodwbzUgR69WO9Pm-nwU"],[8,"Dimmuborgir",65.5912,-16.9123,"Collapsed lava tube, home of the Yule Lads","ChIJ2U0EEiOfzUgRFiNiNp9NH4A"],[8,"Skútustaðagígar",65.5686,-17.0352,"Pseudo-craters. The easiest walk of the trip","ChIJ-1FZYmKbzUgRc2ntWEz8k2o"],[9,"Goðafoss",65.6828,-17.5502,"West bank for the wide view","ChIJnzYfSGp-zUgROx0NTqrNu34"],[9,"Akureyri",65.6799,-18.0908,"Lunch, the church, the botanical gardens","ChIJ6dYm-A6P0kgRIIlv_h0HSBk"],[9,"Herring Era Museum, Siglufjörður",66.1481,-18.9128,"Three buildings and a boat. Better than it sounds","ChIJQR9qiz3K0kgRFiH1W7xdwa0"],[9,"Hofsós swimming pool",65.8958,-19.4108,"Infinity pool on the cliff edge","ChIJvQ52z-zY0kgRba8qrsNnwsI"],[9,"Hótel Tindastóll, Sauðárkrókur",65.7518,-19.6522,"Night 9 — built 1884","ChIJFfQtTmIi00gRIgvmtX43Exk"],[10,"Glaumbær Turf Farm",65.6104,-19.5044,"Best-preserved turf farm in Iceland","ChIJNQJFKFwb00gRV22ZxLOQ43Y"],[10,"Kolugljúfur Canyon",65.3334,-20.5713,"The giantess Kola's gorge. 7 km of gravel","ChIJSV7Nt8F900gRLkWlCIWvklg"],[10,"Hvítserkur",65.6064,-20.6352,"Basalt sea stack like a drinking dragon","ChIJw2W6pPRd00gR_OWkBoRneTY"],[10,"Eiríksstaðir",65.0586,-21.5386,"Erik the Red's longhouse. Saga told round the fire","ChIJpUY4kHpY1EgRj75CZ5kH8PI"],[10,"Fosshotel Stykkishólmur",65.0722,-22.7254,"Night 10 — climb Súgandisey at sunset","ChIJA_s9JuUN1UgRuLi69uot5QI"],[11,"Kirkjufell",64.9399,-23.3065,"Morning light, waterfall foreground","ChIJ2zHJmlV61UgRFL_TXRVu5PY"],[11,"Djúpalónssandur",64.7523,-23.9005,"The Epine wreck and the four lifting stones","ChIJ35IdKpCIKkkR29veil49-0M"],[11,"Lóndrangar",64.7325,-23.7846,"Two basalt plugs and a seabird colony","ChIJr2DJE5WHKkkRKiuUjICGmXk"],[11,"Arnarstapi",64.7656,-23.6271,"Basalt arches, path to Hellnar","ChIJ09CGMcSAKkkRXZnXg2kup28"],[11,"Búðakirkja",64.8217,-23.384,"Black church on the lava field","ChIJv8Ug4gN_1UgRtUn7cmhYLgc"],[11,"Hótel Búðir",64.8231,-23.3842,"Night 11 — two minutes from the church","ChIJ60U6zgN_1UgRHz-eDvu2d-8"],[12,"Hraunfossar",64.7029,-20.9772,"A kilometre of water out of lava","ChIJz5PmX-I-1EgRyUQk3iKCpOQ"],[12,"The Reykjavík EDITION",64.1497,-21.9408,"Night 12"]];
+const DAYCOL = ['#5A6672','#3F7F98','#4E8FA6','#65784F','#7C8F55','#D9A441','#C98B33','#A65A3A','#8C5668','#5E5A8C','#2F6B7E'];
+
+function gmapsUrl(name, lat, lng, pid){
+  return 'https://www.google.com/maps/search/?api=1&query='
+       + encodeURIComponent(pid ? name : name + ' Iceland')
+       + (pid ? '&query_place_id=' + pid : '');
+}
+
+(function(){
+  const el = document.getElementById('map');
+  if (!el || typeof L === 'undefined') return;
+  const map = L.map(el, { scrollWheelZoom: false }).setView([64.96, -18.6], 6);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    maxZoom: 17, attribution: '&copy; OpenStreetMap contributors'
+  }).addTo(map);
+
+  const byDay = {};
+  PLACES.forEach(p => { (byDay[p[0]] = byDay[p[0]] || []).push(p); });
+
+  const layers = {};
+  Object.keys(byDay).forEach(d => {
+    const col = DAYCOL[d] || '#3F7F98';
+    const g = L.layerGroup();
+    byDay[d].forEach(([day, name, lat, lng, note, pid]) => {
+      const icon = L.divIcon({ className: '', iconSize: [24, 24], iconAnchor: [12, 12],
+        html: '<div class="pin" style="width:24px;height:24px;background:' + col + '">' + (day || 'S') + '</div>' });
+      L.marker([lat, lng], { icon, title: name })
+        .bindPopup('<span class="d">' + (day ? 'Day ' + day : 'Arrival') + '</span><b>' + name + '</b>' +
+          (note ? note : '') +
+          '<a target="_blank" rel="noopener" href="' + gmapsUrl(name, lat, lng, pid) + '">Photos &amp; directions</a>')
+        .addTo(g);
+    });
+    if (byDay[d].length > 1) {
+      L.polyline(byDay[d].map(p => [p[2], p[3]]), { color: col, weight: 2.5, opacity: .65 }).addTo(g);
+    }
+    layers[d] = g.addTo(map);
+  });
+
+  map.fitBounds(L.latLngBounds(PLACES.map(p => [p[2], p[3]])).pad(0.08));
+
+  const bar = document.getElementById('mapbar');
+  const days = Object.keys(byDay).sort((a, b) => a - b);
+  function setAll(on){
+    days.forEach(d => { on ? layers[d].addTo(map) : map.removeLayer(layers[d]); });
+    [...bar.children].forEach(b => b.setAttribute('aria-pressed', String(on && b.dataset.day !== 'all')));
+    bar.firstChild.setAttribute('aria-pressed', String(on));
+    if (on) map.fitBounds(L.latLngBounds(PLACES.map(p => [p[2], p[3]])).pad(0.08));
+  }
+  const all = document.createElement('button');
+  all.textContent = 'All days'; all.dataset.day = 'all'; all.setAttribute('aria-pressed', 'true');
+  all.onclick = () => setAll(true);
+  bar.appendChild(all);
+  days.forEach(d => {
+    const b = document.createElement('button');
+    b.textContent = d === '0' ? 'Arrive' : 'Day ' + d;
+    b.dataset.day = d; b.setAttribute('aria-pressed', 'true');
+    b.onclick = () => {
+      days.forEach(x => map.removeLayer(layers[x]));
+      layers[d].addTo(map);
+      [...bar.children].forEach(x => x.setAttribute('aria-pressed', String(x.dataset.day === d)));
+      map.fitBounds(L.latLngBounds(byDay[d].map(p => [p[2], p[3]])).pad(0.25));
+    };
+    bar.appendChild(b);
+  });
+
+  /* Google Maps directions, one link per day.
+     Each day starts where the previous one ended, so the distance Google
+     reports matches the leg tables. Walk-in sites are routed to their car
+     park — a footpath coordinate can't be snapped to the road network and
+     makes Google drop the entire route. */
+  const ROUTE_FIX = {
+    'Sólheimajökull': [63.5290, -19.3667],   // car park at the end of road 221
+    'Svartifoss, Skaftafell': [64.0165, -16.9665] // Skaftafell visitor centre car park
+  };
+  const nameOf = p => p[1];
+  const coordOf = p => ROUTE_FIX[p[1]] ? ROUTE_FIX[p[1]].join(',') : (p[2] + ',' + p[3]);
+  const idOf = p => (ROUTE_FIX[p[1]] ? '' : (p[5] || ''));
+
+  const ml = document.getElementById('maplinks');
+  const ordered = days.slice().sort((a, b) => a - b);
+
+  ordered.filter(d => d !== '0').forEach((d, i) => {
+    const prev = ordered[ordered.indexOf(d) - 1];
+    const start = byDay[prev][byDay[prev].length - 1];   // last night's hotel
+    const pts = [start].concat(byDay[d]);
+    const dest = pts[pts.length - 1];
+    const mid = pts.slice(1, -1);
+
+    const q = new URLSearchParams();
+    q.set('api', '1');
+    q.set('origin', idOf(start) ? nameOf(start) : coordOf(start));
+    if (idOf(start)) q.set('origin_place_id', idOf(start));
+    q.set('destination', idOf(dest) ? nameOf(dest) : coordOf(dest));
+    if (idOf(dest)) q.set('destination_place_id', idOf(dest));
+    if (mid.length) {
+      q.set('waypoints', mid.map(p => idOf(p) ? nameOf(p) : coordOf(p)).join('|'));
+      if (mid.every(idOf)) q.set('waypoint_place_ids', mid.map(idOf).join('|'));
+    }
+    q.set('travelmode', 'driving');
+
+    const a = document.createElement('a');
+    a.target = '_blank'; a.rel = 'noopener';
+    a.href = 'https://www.google.com/maps/dir/?' + q.toString();
+    a.innerHTML = 'Day ' + d + '<span>from ' + nameOf(start) + ' · ' + byDay[d].length + ' stops</span>';
+    ml.appendChild(a);
+  });
+})();
+</script>
+</body>
+</html>
